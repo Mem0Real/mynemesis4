@@ -1,6 +1,6 @@
 import { prisma } from "@/db";
-import getCategories from "@/libraries/getCategories";
 import { NextResponse } from "next/server";
+import getEntries from "@/libraries/getEntries";
 
 export default async function listCategories() {
   const categories = await prisma.categories.findMany();

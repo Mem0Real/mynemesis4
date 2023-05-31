@@ -1,7 +1,4 @@
-import searchCategories from "@/libraries/searchCategories";
-import searchParents from "@/libraries/searchParents";
-import searchChildren from "@/libraries/searchChildren";
-import searchItems from "@/libraries/searchItems";
+import searchEverything from "@/libraries/searchEverything";
 
 import Categories from "./Categories";
 import Parents from "./Parents";
@@ -14,35 +11,24 @@ const SearchPage = async ({ searchParams }) => {
 
   const encodedSearchQuery = encodeURI(searchQuery || "");
 
-  const searchCategory = searchCategories(encodedSearchQuery);
-  const searchParent = searchParents(encodedSearchQuery);
-  const searchChild = searchChildren(encodedSearchQuery);
-  const searchItem = searchItems(encodedSearchQuery);
-
-  const [categories, parents, children, items] = await Promise.all([
-    searchCategory,
-    searchParent,
-    searchChild,
-    searchItem,
-  ]);
-
+  const searchResult = await searchEverything(encodedSearchQuery);
   function isObjEmpty(obj) {
     return Object.keys(obj).length === 0;
   }
 
   let categoryContent, parentContent, childContent, itemContent, empty;
   if (searchQuery) {
-    if (!isObjEmpty(categories)) {
-      categoryContent = <Categories categories={categories} />;
+    if (!isObjEmpty(searchResult[0])) {
+      categoryContent = <Categories categories={searchResult[0]} />;
     }
-    if (!isObjEmpty(parents)) {
-      parentContent = <Parents parents={parents} />;
+    if (!isObjEmpty(searchResult[1])) {
+      parentContent = <Parents parents={searchResult[1]} />;
     }
-    if (!isObjEmpty(children)) {
-      childContent = <Children children={children} />;
+    if (!isObjEmpty(searchResult[2])) {
+      childContent = <Children children={searchResult[2]} />;
     }
-    if (!isObjEmpty(items)) {
-      itemContent = <Items items={items} />;
+    if (!isObjEmpty(searchResult[3])) {
+      itemContent = <Items items={searchResult[3]} />;
     }
     return (
       <div className="flex flex-col gap-8 text-zinc-900 mt-2 md:mt-12">

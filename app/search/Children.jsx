@@ -1,27 +1,22 @@
-import getCategoryId from "@/libraries/getCategoryId";
-import getParentId from "@/libraries/getParentId";
 import Link from "next/link";
+import getEntry from "@/libraries/getEntry";
 
 export default function Children({ children }) {
   return (
     <div className="flex flex-col justify-evenly gap-6 items-center w-full">
       <p className="text-zinc-500 text-lg ">Child Categories </p>
+
       {children.map(async (child) => {
-        const categoryData = getCategoryId(child.CategoryId);
-        const parentData = getParentId(child.ParentId);
-
-        const [category, parent] = await Promise.all([
-          categoryData,
-          parentData,
-        ]);
-
-        const categoryName = category.shortName;
-        const parentName = parent.shortName;
+        const parentData = await getEntry("parents", child.ParentId);
+        const categoryData = await getEntry(
+          "categories",
+          parentData.CategoryId
+        );
         return (
           <div className="flex flex-col justify-center items-center">
             <ul className="list-disc">
               <Link
-                href={`/collection/${categoryName}/${parentName}/${child.shortName}`}
+                href={`/collection/${categoryData.id}/${parentData.id}/${child.id}`}
               >
                 <li>{child.name}</li>
               </Link>

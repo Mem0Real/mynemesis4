@@ -1,9 +1,7 @@
-// import getCategory from "@/libraries/getCategory";
 import Parents from "./Parents";
 import { Suspense } from "react";
 import Link from "next/link";
 import getEntry from "@/libraries/getEntry";
-// import CategoryData from "@/app/components/collectionContent/CategoryData";
 
 export async function generateMetadata({ params: { category } }) {
   let firstLetter = category[0];

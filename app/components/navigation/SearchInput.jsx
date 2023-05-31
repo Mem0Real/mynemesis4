@@ -5,12 +5,12 @@ import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMagnifyingGlass,
-  faCircleStop,
 } from "@fortawesome/free-solid-svg-icons";
 
 const SearchInput = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
+  
   const [showSearchList, setShowSearchList] = useState(false);
   const [results, setResults] = useState("");
 

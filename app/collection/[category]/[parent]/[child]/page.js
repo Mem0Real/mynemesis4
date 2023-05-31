@@ -14,18 +14,19 @@ export async function generateMetadata({ params: { child } }) {
 }
 
 export default async function Child(props) {
-  let currentCategory = props.params.category;
-  let currentParent = props.params.parent;
-  let currentChild = props.params.child;
-  const childData = await getEntry("children", currentChild);
+  let CategoryId = props.params.category;
+  let ParentId = props.params.parent;
+  let ChildId = props.params.child;
+
+  const childData = await getEntry("children", ChildId);
 
   const content = (
     <div
       key={childData.id}
-      className="flex flex-col justify-between items-center text-sm mb-1 w-screen bg-neutral-100 text-neutral-900 h-fit"
+      className="flex flex-col justify-between items-center text-sm mb-1 w-screen bg-neutral-100 text-neutral-900 h-fit md:mt-12"
     >
       <div className="flex justify-end items-end w-full p-4">
-        <Link href={`/collection/${currentCategory}`}>
+        <Link href={`/collection/${CategoryId}/${ParentId}`}>
           <h2 className="px-2 py-1 md:top-24 md:right-12 md:px-4 md:py-2 bg-neutral-900 text-white rounded-lg">
             Go Back
           </h2>
@@ -38,18 +39,14 @@ export default async function Child(props) {
       <div className="flex-initial min-h-screen w-full">
         <Suspense fallback={<h1>Loading...</h1>}>
           <Items
-            ChildId={currentChild}
-            ParentId={currentParent}
-            CategoryId={currentCategory}
+            CategoryId={CategoryId}
+            ParentId={ParentId}
+            ChildId={ChildId}
           />
         </Suspense>
       </div>
     </div>
   );
 
-  return (
-    <div className="flex flex-col justify-evenly items-center w-screen mt-12">
-      {content}
-    </div>
-  );
+  return content;
 }

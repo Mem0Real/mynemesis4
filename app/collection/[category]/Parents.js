@@ -13,8 +13,8 @@ export default async function Parents(props) {
 
   if (isObjEmpty(parentData)) {
     content = (
-      <div className="flex flex-col w-full justify-center items-center">
-        Data Empty.
+      <div className="flex flex-col justify-around items-center text-sm mb-1 w-screen bg-neutral-300 text-neutral-900 h-fit">
+        <h1>Empty</h1>
       </div>
     );
   } else {

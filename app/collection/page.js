@@ -1,10 +1,8 @@
-import getCategories from "@/libraries/getCategories";
 import Image from "next/image";
 import Link from "next/link";
 import getEntries from "@/libraries/getEntries";
 
 export default async function CollectionPage() {
-  // const categories = await getCategories();
   const categories = await getEntries("categories");
 
   const content = categories.map((category) => {

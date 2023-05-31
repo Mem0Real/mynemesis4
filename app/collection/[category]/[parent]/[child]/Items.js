@@ -17,8 +17,8 @@ export default async function Children(props) {
 
   if (isObjEmpty(itemsData)) {
     content = (
-      <div className="flex flex-col w-full justify-center items-center">
-        Data Empty.
+      <div className="flex flex-col justify-around items-center text-sm mb-1 w-screen bg-neutral-300 text-neutral-900 h-fit">
+        <h1>Empty</h1>
       </div>
     );
   } else {
@@ -26,17 +26,16 @@ export default async function Children(props) {
       return (
         <div
           key={item.id}
-          className="flex flex-col justify-center items-center"
+          className="flex flex-col justify-between items-center"
         >
           <Link
             href={`/collection/${CategoryId}/${ParentId}/${ChildId}/${item.id}`}
           >
-            <div className="flex flex-col justify-center items-center w-fit">
-              <h1 className="text-center text-lg my-5 underline underline-offset-8 hover:underline-offset-4">
-                {item.name}
-              </h1>
-            </div>
+            <h1 className="text-center text-lg my-5 underline underline-offset-8 hover:underline-offset-4">
+              {item.name}
+            </h1>
           </Link>
+          <div className="w-56 h-56"></div>
           {/* <Image
             src={`/images/${categoryName}/${parentName}/${childName}/${item.id}.png`}
             width="200"
@@ -48,9 +47,5 @@ export default async function Children(props) {
       );
     });
   }
-  return (
-    <div className="flex flex-col flex-wrap justify-center items-center ps-2 text-sm mb-1 w-screen bg-neutral-100 text-neutral-900">
-      {content}
-    </div>
-  );
+  return <div className="flex justify-around items-center"> {content}</div>;
 }
