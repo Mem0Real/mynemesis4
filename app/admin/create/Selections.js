@@ -4,7 +4,6 @@ import Loading from "@/app/loading";
 import React, { useEffect, useState } from "react";
 
 export default function Selections({ handleChange, entry }) {
-  console.log(entry);
   const [data, setData] = useState(null);
   const [isLoading, setLoading] = useState(false);
   let selection = entry;

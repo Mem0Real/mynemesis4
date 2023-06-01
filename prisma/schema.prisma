@@ -39,8 +39,8 @@ model Items {
   brand         String?
   model         String?
   quantity      Int?
-  price         Int?
-  images        String[]
+  price         Float?
+  image         String?
   child         Children      @relation(fields: [ChildId], references: [id])
   
   ChildId       String

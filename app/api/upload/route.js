@@ -26,6 +26,24 @@ export async function POST(request, response) {
   let childId = formData.get("children");
   let name = formData.get("name");
 
+  let brand = formData.get("brand");
+  let model = formData.get("model");
+  let quantity = formData.get("quantity");
+  let price = formData.get("price");
+
+  if (brand === null) brand = undefined;
+  if (model === null) model = undefined;
+  if (quantity === null) {
+    quantity = undefined;
+  } else {
+    quantity = parseInt(quantity, 10);
+  }
+  if (price === null) {
+    price = undefined;
+  } else {
+    price = parseFloat(price);
+  }
+
   let id = formData.get("id");
   let description = formData.get("description");
   let image = formData.get("image");
@@ -55,11 +73,15 @@ export async function POST(request, response) {
       category = { name: "CategoryId", val: categoryId };
     } else if (parentId !== null) {
       category = { name: "ParentId", val: parentId };
+    } else if (childId !== null) {
+      category = { name: "ChildId", val: childId };
     } else {
       category.name = undefined;
       category.val = undefined;
     }
 
+    if (entry === "items") {
+    }
     const exist = await checkExistence(id);
 
     if (!exist) {
@@ -67,6 +89,10 @@ export async function POST(request, response) {
         data: {
           id: id,
           name: name,
+          brand: brand,
+          model: model,
+          quantity: quantity,
+          price: price,
           description: description,
           image: image,
           [category.name]: category.val,

@@ -80,26 +80,30 @@ export default function Create() {
             </select>
           </div>
 
-          {data.entry && data.entry !== "item" && (
+          {data.entry && (
             <div className="w-full">
-              {console.log(data.entry)}
               {data.entry === "Parents" && (
                 <Selections handleChange={handleChange} entry={"categories"} />
               )}
               {data.entry === "Children" && (
                 <Selections handleChange={handleChange} entry={"parents"} />
               )}
+              {data.entry === "Items" && (
+                <Selections handleChange={handleChange} entry={"children"} />
+              )}
+              {/* Name */}
               <div className="flex flex-col justify-start items-center md:mt-12 px-12">
                 <label htmlFor="name">Name</label>
                 <input
                   name="name"
                   type="text"
                   value={data.name}
-                  className="border border-neutral-700 rounded-md w-full py-2"
+                  className="border border-neutral-700 rounded-md w-full py-2 ps-4"
                   onChange={handleChange}
                   required
                 />
               </div>
+              {/* ShortName A.K.A Id */}
               <div className="flex flex-col justify-evenly items-center my-12 md:mt-12 px-12">
                 <label htmlFor="id">
                   ShortName
@@ -109,11 +113,63 @@ export default function Create() {
                   name="id"
                   type="text"
                   value={data.id}
-                  className="ps-3 border border-neutral-900 rounded-md  w-full py-2"
+                  className="border border-neutral-900 rounded-md  w-full py-2 ps-4"
                   onChange={handleChange}
                 />
               </div>
-              <div className="flex flex-col justify-evenly items-center my-12 md:mt-12 w-full">
+              {data.entry === "Items" && (
+                <>
+                  {/* Brand */}
+                  <div className="flex flex-col justify-start items-center md:mt-12 px-12">
+                    <label htmlFor="name">Brand</label>
+                    <input
+                      name="brand"
+                      type="text"
+                      value={data.brand}
+                      className="border border-neutral-700 rounded-md w-full py-2 ps-4"
+                      onChange={handleChange}
+                    />
+                  </div>
+                  {/* Model */}
+                  <div className="flex flex-col justify-start items-center md:mt-12 px-12">
+                    <label htmlFor="name">Model</label>
+                    <input
+                      name="model"
+                      type="text"
+                      value={data.model}
+                      className="border border-neutral-700 rounded-md w-full py-2 ps-4"
+                      onChange={handleChange}
+                    />
+                  </div>
+                  {/* Quantity */}
+                  <div className="flex flex-col justify-start items-center md:mt-12 px-12">
+                    <label htmlFor="name">Quantity</label>
+                    <input
+                      name="quantity"
+                      type="number"
+                      value={data.quantity}
+                      className="border border-neutral-700 rounded-md w-full py-2 ps-4"
+                      onChange={handleChange}
+                    />
+                  </div>
+                  {/* Price */}
+                  <div className="flex flex-col justify-start md:mt-12 px-12 relative">
+                    <label htmlFor="name">Price</label>
+                    <input
+                      name="price"
+                      type="number"
+                      value={data.price}
+                      className="border border-neutral-700 rounded-md w-full py-2 ps-4"
+                      onChange={handleChange}
+                    />
+                    <p className="absolute top-8 right-16 text-md font-medium">
+                      ETB
+                    </p>
+                  </div>
+                </>
+              )}
+              {/* Image */}
+              <div className="flex flex-col justify-evenly items-center my-12 md:mt-12">
                 <label htmlFor="image">
                   Image
                   <span className="text-sm text-neutral-700">(optional)</span>
@@ -122,16 +178,17 @@ export default function Create() {
                   name="image"
                   type="file"
                   onChange={handleOnChange}
-                  className="md:mt-3 py-3 border border-neutral-700 px-3 rounded-md"
+                  className="md:mt-3 py-3 border border-neutral-700 md:px-3 rounded-md"
                   ref={imageRef}
                 />
               </div>
-
+              {/* Show Selected Image */}
               <div className="flex flex-col justify-evenly items-center my-12 md:mt-12">
                 {imageSrc && (
                   <Image src={imageSrc} width={100} height={100} alt="Image" />
                 )}
               </div>
+              {/* Description */}
               <div className="flex flex-col justify-evenly items-center my-12 md:mt-12">
                 <label htmlFor="description">
                   Description
@@ -144,11 +201,12 @@ export default function Create() {
                     name="description"
                     type="text"
                     value={data.description}
-                    className="border border-neutral-900 rounded-md p-2"
+                    className="border border-neutral-900 rounded-md p-2 ps-4"
                     onChange={handleChange}
                   />
                 </div>
               </div>
+              {/* Button */}
               <div className="flex flex-col justify-center items-center md:mt-12">
                 {!uploadData ? (
                   <button className="px-4 py-2 rounded-md bg-green-500 text-neutral-100">
