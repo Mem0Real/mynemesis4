@@ -18,42 +18,72 @@ export async function POST(request, response) {
   //   const file = await request.formData();
   //   console.log(file);
 
-  const formData = await request.formData();
-  const file = formData.get("image");
-  const entry = formData.get("entry");
-  const name = formData.get("name");
-  const shortName = formData.get("shortName");
-  const description = formData.get("description");
+  let formData = await request.formData();
+  let file = formData.get("image");
+  let entry = formData.get("entry");
+  let categoryId = formData.get("categories");
+  let parentId = formData.get("parents");
+  let childId = formData.get("children");
+  let name = formData.get("name");
+
+  let id = formData.get("id");
+  let description = formData.get("description");
+  let image = formData.get("image");
+
+  let category, parent, child;
 
   //   Write to databse
   const writeToDb = async (dir) => {
-    let shortname, desc;
+    formData.set("image", dir);
+    image = formData.get("image");
 
-    if (shortName === "") {
-      shortname = name.toLowerCase();
-      let array = shortname.split(/ and| &|, /);
-      shortname = array[0];
-      shortname = shortname.replace(/\s/g, "-");
-    } else {
-      shortname = shortName;
+    if (id === null) {
+      let idName = name.toLowerCase();
+      let array = idName.split(/ and| &|, /);
+      idName = array[0];
+      idName = idName.replace(/\s/g, "-");
+      formData.set("id", idName);
+      id = formData.get("id");
     }
 
-    if (description === "") {
-      desc = name;
-    } else {
-      desc = description;
+    if (description === null) {
+      formData.set("description", name);
+      description = formData.get("description");
     }
 
-    const res = await prisma[entry].create({
-      data: {
-        name: name,
-        shortName: shortname,
-        image: dir,
-        description: desc,
-      },
-    });
+    if (categoryId !== null) {
+      category = { name: "CategoryId", val: categoryId };
+    } else if (parentId !== null) {
+      category = { name: "ParentId", val: parentId };
+    } else {
+      category.name = undefined;
+      category.val = undefined;
+    }
+
+    const exist = await checkExistence(id);
+
+    if (!exist) {
+      const res = await prisma[entry].create({
+        data: {
+          id: id,
+          name: name,
+          description: description,
+          image: image,
+          [category.name]: category.val,
+        },
+      });
+      return res;
+    } else return { message: `"${name}" Already Exists.` };
 
     // return NextResponse.json(res);
+  };
+
+  const checkExistence = async (id, name) => {
+    const result = await prisma[entry].findUnique({
+      where: { id: id },
+    });
+
+    return result;
   };
 
   if (!file) {
@@ -95,12 +125,11 @@ export async function POST(request, response) {
         /\.[^/.]+$/,
         ""
       )}-${uniqueSuffix}.${mime.getExtension(file.type)}`;
-      // let dir = `${uploadDir}/${filename}`;
       await writeFile(`${uploadDir}/${filename}`, buffer);
       let imageUrl = `${relativeUploadDir}/${filename}`;
       let dbStat = writeToDb(imageUrl);
-      //   return NextResponse.json(dbStat);
-      return NextResponse.json({ imgUrl: `${relativeUploadDir}/${filename}` });
+      return dbStat;
+      // return NextResponse.json({ imgUrl: `${relativeUploadDir}/${filename}` });
     } catch (e) {
       console.error("Error while trying to upload a file\n", e);
       return NextResponse.json(

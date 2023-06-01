@@ -4,16 +4,10 @@ import React, { useState, useRef } from "react";
 import createCategory from "./createCategory";
 
 import Image from "next/image";
+import Selections from "./Selections";
 
 export default function Create() {
-  const initialValues = {
-    entry: "",
-    name: "",
-    shortName: "",
-    image: "",
-    description: "",
-  };
-  const [data, setData] = useState(initialValues);
+  const [data, setData] = useState({});
   const [imageSrc, setImageSrc] = useState();
   const [uploadData, setUploadData] = useState();
   const [status, setStatus] = useState();
@@ -43,7 +37,7 @@ export default function Create() {
     event.preventDefault();
     let res = await createCategory(data);
     setStatus(res);
-    setData(initialValues);
+    setData({});
     setImageSrc();
   };
 
@@ -85,9 +79,16 @@ export default function Create() {
               </option>
             </select>
           </div>
-          {/* {selectValue && selectValue !== "item" && ( */}
+
           {data.entry && data.entry !== "item" && (
             <div className="w-full">
+              {console.log(data.entry)}
+              {data.entry === "Parents" && (
+                <Selections handleChange={handleChange} entry={"categories"} />
+              )}
+              {data.entry === "Children" && (
+                <Selections handleChange={handleChange} entry={"parents"} />
+              )}
               <div className="flex flex-col justify-start items-center md:mt-12 px-12">
                 <label htmlFor="name">Name</label>
                 <input
@@ -100,14 +101,14 @@ export default function Create() {
                 />
               </div>
               <div className="flex flex-col justify-evenly items-center my-12 md:mt-12 px-12">
-                <label htmlFor="shortName">
+                <label htmlFor="id">
                   ShortName
                   <span className="text-sm text-neutral-700">(optional)</span>
                 </label>
                 <input
-                  name="shortName"
+                  name="id"
                   type="text"
-                  value={data.shortName}
+                  value={data.id}
                   className="ps-3 border border-neutral-900 rounded-md  w-full py-2"
                   onChange={handleChange}
                 />
@@ -117,7 +118,6 @@ export default function Create() {
                   Image
                   <span className="text-sm text-neutral-700">(optional)</span>
                 </label>
-                {/* <div className="flex justify-center items-center w-64 md:w-72 md:px-5 mx-8"> */}
                 <input
                   name="image"
                   type="file"
@@ -125,18 +125,11 @@ export default function Create() {
                   className="md:mt-3 py-3 border border-neutral-700 px-3 rounded-md"
                   ref={imageRef}
                 />
-                {/* </div> */}
               </div>
 
               <div className="flex flex-col justify-evenly items-center my-12 md:mt-12">
                 {imageSrc && (
-                  <Image
-                    src={imageSrc}
-                    width={100}
-                    height={100}
-                    alt="Image"
-                    // className="md:h-auto md:w-auto"
-                  />
+                  <Image src={imageSrc} width={100} height={100} alt="Image" />
                 )}
               </div>
               <div className="flex flex-col justify-evenly items-center my-12 md:mt-12">
