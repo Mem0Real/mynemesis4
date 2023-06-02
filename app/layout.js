@@ -27,12 +27,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={poppins.className}>
-        <div className="flex flex-col overflow-x-hidden no-scrollbar overflow-y-auto overscroll-y-none bg-neutral-100">
+        <div className="flex flex-col justify-between h-full overflow-x-hidden no-scrollbar overflow-y-auto overscroll-y-none bg-neutral-100 relative">
           <Navbar />
           <Suspense fallback={<Loading />}>
-            <div className="min-h-screen h-fit mt-6">{children}</div>
+            <div className="min-h-screen">{children}</div>
           </Suspense>
-          <Footer />
+          <div className="absolute bottom-0 w-full">
+            <Footer />
+          </div>
         </div>
       </body>
     </html>

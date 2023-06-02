@@ -28,7 +28,7 @@ export const Navbar = () => {
 
   return (
     <div ref={menuRef}>
-      <nav className="w-full md:h-16 h-fit shadow-xl bg-neutral-900 text-white navbar fixed z-10">
+      <nav className="w-full md:h-16 h-fit shadow-xl bg-neutral-900 text-white navbar">
         <div className="flex justify-between items-center w-full h-full px-8 py-2 text-md">
           <Link href="/">
             <div className="flex justify-evenly items-center">
@@ -108,7 +108,7 @@ export const Navbar = () => {
           isOpen ? "block" : "hidden"
         }`}
       >
-        <ul className="text-sm sm:hidden block bg-neutral-900 py-5 mt-9">
+        <ul className="text-sm sm:hidden block bg-neutral-900 py-5 mt-0 md:mt-9">
           <Link href="/collection">
             <li className="block mt-4 border-b lg:inline-block lg:mt-0 text-white-200 mr-4 ml-10 hover:border-b border-white border-spacing-y-2 py-3 font-medium">
               Collection

@@ -10,7 +10,7 @@ export default async function SidebarData() {
         className="flex flex-col items-start ps-2 text-md mb-1"
       >
         <details>
-          <summary className="w-64 h-8 cursor-pointer py-6">
+          <summary className="w-64 h-8 cursor-pointer py-5">
             {category.name}
           </summary>
           <div>
