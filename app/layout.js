@@ -11,6 +11,8 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 import Loading from "./loading";
 config.autoAddCss = false;
 
+// import { NextUIProvider } from "@nextui-org/react";
+
 const inter = Inter({ subsets: ["latin"] });
 const poppins = Poppins({
   subsets: ["latin"],
@@ -27,6 +29,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={poppins.className}>
+        {/* <NextUIProvider> */}
         <div className="flex flex-col justify-between h-full overflow-x-hidden no-scrollbar overflow-y-auto overscroll-y-none bg-neutral-100 relative">
           <Navbar />
           <Suspense fallback={<Loading />}>
@@ -36,6 +39,7 @@ export default function RootLayout({ children }) {
             <Footer />
           </div>
         </div>
+        {/* </NextUIProvider> */}
       </body>
     </html>
   );

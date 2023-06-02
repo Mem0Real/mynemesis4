@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Logo from "@/public/images/nemesisLogo.jpg";
+// import Logo from "@";
 import Link from "next/link";
 import { Poppins } from "next/font/google";
 import { useState, useEffect, useRef } from "react";
@@ -33,10 +33,10 @@ export const Navbar = () => {
           <Link href="/">
             <div className="flex justify-evenly items-center">
               <Image
-                src={Logo}
+                src="/images/nemesisLogo.jpg"
                 alt="logo"
                 width="55"
-                height="auto"
+                height="55"
                 className="cursor-pointer rounded-full"
                 priority
               />
