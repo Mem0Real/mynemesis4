@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-// import Logo from "@";
 import Link from "next/link";
 import { Poppins } from "next/font/google";
 import { useState, useEffect, useRef } from "react";
