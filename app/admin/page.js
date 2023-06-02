@@ -1,6 +1,6 @@
 import Link from "next/link";
 import getEverything from "@/libraries/getEverything";
-import Actions from "./components/Actions";
+import Actions from "./Actions";
 
 export default async function AdminPage() {
   const res = await getEverything();

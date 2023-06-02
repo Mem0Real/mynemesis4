@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { Loader } from "./components/loader/Loader";
 
+
 export default async function Home() {
   return (
     <main className="flex min-h-screen h-fit min-w-screen items-center justify-center bg-neutral-100 text-neutral-900 relative">

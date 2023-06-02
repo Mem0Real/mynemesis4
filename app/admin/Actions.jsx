@@ -43,7 +43,7 @@ export default function Actions({ data }) {
       </div>
     </div>
   ) : (
-    <div className="flex flex-col w-4/5 justify-center items-center mx-auto">
+    <div className="flex flex-col w-full px-8 justify-center items-center mx-auto">
       <Suspense fallback={<h1>Loading...</h1>}>
         <List data={data} closeList={closeList} />
       </Suspense>

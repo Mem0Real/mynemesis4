@@ -10,9 +10,7 @@ export default function Create() {
   const [data, setData] = useState({});
   const [imageSrc, setImageSrc] = useState();
   const [uploadData, setUploadData] = useState();
-  const [status, setStatus] = useState();
-  const [showMessage, setShowMessage] = useState(false);
-
+  
   const imageRef = useRef();
   const handleOnChange = (changeEvent) => {
     const reader = new FileReader();
