@@ -47,7 +47,7 @@ export const Navbar = () => {
           <div className="w-full">
             <ul className="hidden md:flex">
               <div className="flex justify-between items-center w-full">
-                <div className="md:px-9">
+                <div className="md:px-11">
                   <SearchInput />
                 </div>
                 <div className="flex">

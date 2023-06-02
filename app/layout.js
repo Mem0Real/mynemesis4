@@ -35,7 +35,7 @@ export default function RootLayout({ children }) {
           <Suspense fallback={<Loading />}>
             <div className="min-h-screen">{children}</div>
           </Suspense>
-          <div className="absolute bottom-0 w-full">
+          <div className="w-full">
             <Footer />
           </div>
         </div>

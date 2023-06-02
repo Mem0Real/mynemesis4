@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-// import List from "./List";
+import List from "./List";
 import { Suspense } from "react";
 
 export default function Actions({ data }) {
@@ -44,9 +44,9 @@ export default function Actions({ data }) {
     </div>
   ) : (
     <div className="flex flex-col w-4/5 justify-center items-center mx-auto">
-      {/* <Suspense fallback={<h1>Loading...</h1>}>
-          <List data={data} closeList={closeList} />
-        </Suspense> */}
+      <Suspense fallback={<h1>Loading...</h1>}>
+        <List data={data} closeList={closeList} />
+      </Suspense>
     </div>
   );
 }
