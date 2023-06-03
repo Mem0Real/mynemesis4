@@ -2,10 +2,9 @@
 
 import React, { useState, useRef, createContext, useContext } from "react";
 
-// import {Box, Button, Typography, Modal, Collapse, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper} from "@mui/material"
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
+import Button from "@mui/material/Button";
 import ListTable from "./components/ListTable";
+import ModalPage from "./components/ModalPage";
 
 const FunctionsContext = createContext({});
 
@@ -39,15 +38,13 @@ export default function List({ closeList, data }) {
     p: 4,
   };
 
-  const Add = (categoryId, parentId = null, childId = null, itemId = null) => {
+  const Add = (entry, categoryId = null, parentId = null, childId = null) => {
     // Show Add Modal
+
+    categoryId && setAddData({ entry: entry, categories: categoryId });
+    parentId && setAddData({ entry: entry, parents: parentId });
+    childId && setAddData({ entry: entry, children: childId });
     setModal(true);
-    setAddData({
-      ...data,
-      CategoryId: categoryId,
-      ParentId: parentId,
-      ChildId: childId,
-    });
   };
   const Edit = (e) => {};
   const Delete = (e) => {};
@@ -78,6 +75,7 @@ export default function List({ closeList, data }) {
     let res = await createCategory(data);
     setStatus(res);
     setData({});
+    setAddData({});
     setImageSrc();
   };
 
@@ -153,27 +151,26 @@ export default function List({ closeList, data }) {
       <FunctionsContext.Provider value={{ Add, Edit, Delete }}>
         <div className="md:my-6 mb-6 shadow-md shadow-black">
           <ListTable data={data} add={Add} edit={Edit} delete={Delete} />
+          <div className="flex flex-col w-full justify-center items-center md:mt-3">
+            <Button
+              variant="contained"
+              color="success"
+              onClick={() => Add("categories")}
+            >
+              Add Category
+            </Button>
+          </div>
         </div>
       </FunctionsContext.Provider>
 
       {/* Add Modal */}
-      <Modal
-        open={modal}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-        className="min-h-screen h-fit"
-      >
-        <Box sx={modalStyle} className="">
-          <h1 className="text-black h-12">Hi</h1>
-          <h1 className="text-black h-12">Hi</h1>
-          <h1 className="text-black h-12">Hi</h1>
-          <h1 className="text-black h-12">Hi</h1>
-          <h1 className="text-black h-12">Hi</h1>
-          <h1 className="text-black h-12">Hi</h1>
-          <h1 className="text-black h-12">Hi</h1>
-        </Box>
-      </Modal>
+
+      <ModalPage
+        modal={modal}
+        handleClose={handleClose}
+        addData={addData}
+        setAddData={setAddData}
+      />
     </div>
   );
 }

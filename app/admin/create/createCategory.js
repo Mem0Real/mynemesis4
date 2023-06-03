@@ -2,10 +2,11 @@ import FormData from "form-data";
 
 export default async function createCategory(data) {
   const formData = new FormData();
+  console.log(data);
   Object.entries(data).forEach(([key, value]) => {
     formData.append(key, value);
   });
-  fetch("/api/upload", {
+  fetch("/api/create", {
     method: "POST",
     body: formData,
   })

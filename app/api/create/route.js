@@ -21,6 +21,7 @@ export async function POST(request, response) {
   let formData = await request.formData();
   let file = formData.get("image");
   let entry = formData.get("entry");
+ 
   let categoryId = formData.get("categories");
   let parentId = formData.get("parents");
   let childId = formData.get("children");
@@ -48,7 +49,9 @@ export async function POST(request, response) {
   let description = formData.get("description");
   let image = formData.get("image");
 
-  let category, parent, child;
+  let category = { name: undefined, val: undefined };
+
+  console.log(entry, id, name, description, image);
 
   //   Write to databse
   const writeToDb = async (dir) => {
@@ -69,13 +72,13 @@ export async function POST(request, response) {
       description = formData.get("description");
     }
 
-
-    if (categoryId !== null) {
-      category = { name: "CategoryId", val: categoryId };
+    if (childId !== null) {
+      category = { name: "ChildId", val: childId };
+      console.log(childId);
     } else if (parentId !== null) {
       category = { name: "ParentId", val: parentId };
-    } else if (childId !== null) {
-      category = { name: "ChildId", val: childId };
+    } else if (categoryId !== null) {
+      category = { name: "CategoryId", val: categoryId };
     } else {
       category.name = undefined;
       category.val = undefined;
