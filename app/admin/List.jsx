@@ -1,49 +1,87 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from "react";
-import "flowbite";
-import Modal from "./components/Modal";
+import React, { useState, useRef, createContext, useContext } from "react";
+
+// import {Box, Button, Typography, Modal, Collapse, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper} from "@mui/material"
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import ListTable from "./components/ListTable";
+
+const FunctionsContext = createContext({});
 
 export default function List({ closeList, data }) {
+  const [open, setOpen] = useState(false);
+  const [modal, setModal] = useState(false);
   const [addData, setAddData] = useState({});
-  const [showAddModal, setShowAddModal] = useState(false);
+
+  const [imageSrc, setImageSrc] = useState();
+  const [uploadData, setUploadData] = useState();
 
   const [cat, setCat] = useState({});
   const [par, setPar] = useState({});
   const [chi, setChi] = useState({});
+
+  const imageRef = useRef();
 
   const categories = data[0];
   const parents = data[1];
   const children = data[2];
   const items = data[3];
 
-  const Add = (e) => {
+  const modalStyle = {
+    position: "absolute",
+    top: "25%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    bgcolor: "background.paper",
+    // border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
+
+  const Add = (categoryId, parentId = null, childId = null, itemId = null) => {
     // Show Add Modal
+    setModal(true);
+    setAddData({
+      ...data,
+      CategoryId: categoryId,
+      ParentId: parentId,
+      ChildId: childId,
+    });
   };
   const Edit = (e) => {};
   const Delete = (e) => {};
 
-  const handleAdd = (categoryId, parentId = null, chi = null) => {
-    setAddData({ ...addData, CategoryId: categoryId });
-    parentId && setAddData({ ...addData, ParentId: parentId });
-    chi && setAddData({ ...addData, ParentId: chi });
-    setShowAddModal(!showAddModal);
+  const handleClose = () => setModal(false);
+
+  const handleOnChange = (changeEvent) => {
+    const reader = new FileReader();
+
+    reader.onload = (onLoadEvent) => {
+      setImageSrc(onLoadEvent.target.result);
+      setUploadData(undefined);
+    };
+
+    reader.readAsDataURL(changeEvent.target.files[0]);
+    setData({ ...data, image: changeEvent.target.files[0] });
   };
 
-  const hideAddModal = () => {
-    setShowAddModal(false);
+  const handleChange = (e) => {
+    const fieldName = e.target.name;
+    const fieldValue = e.target.value;
+
+    setData({ ...data, [fieldName]: fieldValue });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    let res = await createCategory(data);
+    setStatus(res);
+    setData({});
+    setImageSrc();
   };
 
   const catDropDown = (categoryId) => {
-    // !cat.id
-    //   ? setCat({ id: categoryId, open: true })
-    //   : cat.id === categoryId &&
-    //     setCat({ ...cat, open: !cat.open }) &&
-    //     // par.open === true &&
-    //     setPar({ id: "", open: false }) &&
-    //     // chi.open === true &&
-    //     setChi({ id: "", open: false });
-
     if (!cat.id) {
       setCat({ id: categoryId, open: true });
     } else {
@@ -84,10 +122,22 @@ export default function List({ closeList, data }) {
     !chi.id
       ? setChi({ id: childId, open: true })
       : chi.id === childId && setChi({ ...chi, open: !chi.open });
+
+    if (!chi.id) {
+      setChi({ id: childId, open: true });
+    } else {
+      if (chi.id === childId) {
+        setChi({ ...chi, open: !chi.open });
+      } else {
+        setChi({ ...chi, open: false });
+        setChi({ id: childId, open: !chi.open });
+      }
+    }
+    console.log(chi);
   };
 
   return (
-    <div className="flex-flex-col w-full items-center justify-center relative min-h-screen">
+    <div className="flex-flex-col w-full items-center justify-center relative min-h-screen h-fit">
       <div className="flex justify-end items-end">
         <button
           className="px-4 py-2 rounded-md bg-neutral-800 text-neutral-100"
@@ -99,221 +149,33 @@ export default function List({ closeList, data }) {
       <h1 className="text-lg italic underline underline-offset-4 text-center">
         List
       </h1>
-
       {/* Table */}
-      <div className="relative rounded-xl overflow-auto shadow-md shadow-black">
-        <table className="w-full text-sm text-left text-neutral-100 dark:text-gray-400">
-          <thead className="text-xs text-neutral-100 border-b uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-              <th className="px-6 py-5">Name</th>
-              <th scope="col" className="px-6 py-3">
-                Description
-              </th>
-              <th scope="col" className="px-6 py-3">
-                <span className="sr-only">Actions</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {categories.map((category) => {
-              return (
-                <>
-                  <tr
-                    key={category.id}
-                    className="bg-neutral-900 text-neutral-200 cursor-pointer dark:bg-neutral-900 dark:border-gray-700 hover:bg-black dark:hover:bg-gray-600"
-                    onClick={() => catDropDown(category.id)}
-                  >
-                    <th className="px-2 md:px-6 py-2 font-medium whitespace-nowrap dark:text-white">
-                      {category.name}
-                    </th>
-                    <td className="px-6 py-4">{category.description}</td>
-                    <td className="py-4 text-right">
-                      <div className="flex w-full justify-around items-center">
-                        <button
-                          type="button"
-                          data-modal-target="addModal"
-                          data-modal-toggle="addModal"
-                          className="mx-2 hover:underline hover:underline-offset-2"
-                          onClick={() => handleAdd(category.id)}
-                        >
-                          Add
-                        </button>
-                        <button className="mx-2 hover:underline hover:underline-offset-2">
-                          Edit
-                        </button>
-                        <button className="mx-2 hover:underline hover:underline-offset-2">
-                          Delete
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
+      <FunctionsContext.Provider value={{ Add, Edit, Delete }}>
+        <div className="md:my-6 mb-6 shadow-md shadow-black">
+          <ListTable data={data} add={Add} edit={Edit} delete={Delete} />
+        </div>
+      </FunctionsContext.Provider>
 
-                  {parents.map((parent) => {
-                    return (
-                      parent.CategoryId === category.id && (
-                        <>
-                          <tr
-                            key={parent.id}
-                            colSpan={4}
-                            className={`${
-                              cat.id === category.id && cat.open === true
-                                ? ""
-                                : "collapse"
-                            } bg-neutral-800 text-neutral-100 cursor-pointer hover:bg-neutral-900 dark:bg-neutral-900 dark:border-gray-700`}
-                            onClick={() => parDropDown(parent.id)}
-                          >
-                            <th
-                              scope="row"
-                              className="px-10 py-4 font-medium whitespace-nowrap dark:text-white"
-                            >
-                              {parent.name}
-                            </th>
-                            <td className="px-10 py-4 text-neutral-100 text-sm">
-                              {parent.description}
-                            </td>
-                            <td className="text-center">
-                              <div className="flex w-full justify-around items-center">
-                                <button
-                                  type="button"
-                                  data-modal-target="addModal"
-                                  data-modal-toggle="addModal"
-                                  className="mx-2 hover:underline hover:underline-offset-2"
-                                  onClick={() =>
-                                    handleAdd(category.id, parent.id)
-                                  }
-                                >
-                                  Add
-                                </button>
-                                <button className="mx-2 hover:underline hover:underline-offset-2">
-                                  Edit
-                                </button>
-                                <button className="mx-2 hover:underline hover:underline-offset-2">
-                                  Delete
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                          {children.map((child) => {
-                            return (
-                              child.ParentId === parent.id && (
-                                <>
-                                  <tr
-                                    key={child.id}
-                                    colSpan={4}
-                                    className={`${
-                                      par.id === parent.id && par.open === true
-                                        ? ""
-                                        : "collapse"
-                                    } bg-neutral-700 text-neutral-100 cursor-pointer hover:bg-neutral-800 dark:bg-neutral-900 dark:border-gray-700`}
-                                    onClick={() => childDropDown(child.id)}
-                                  >
-                                    <th
-                                      scope="row"
-                                      className="px-14 py-4 font-medium whitespace-nowrap dark:text-white"
-                                    >
-                                      {child.name}
-                                    </th>
-                                    <td className="px-14 py-4 text-neutral-100 text-sm">
-                                      {child.description}
-                                    </td>
-                                    <td className="text-start">
-                                      <div className="flex w-full justify-around items-center">
-                                        <button
-                                          type="button"
-                                          data-modal-target="addModal"
-                                          data-modal-toggle="addModal"
-                                          className="mx-2 hover:underline hover:underline-offset-2"
-                                          onClick={() =>
-                                            handleAdd(
-                                              category.id,
-                                              parent.id,
-                                              child.id
-                                            )
-                                          }
-                                        >
-                                          Add
-                                        </button>
-                                        <button className="mx-2 hover:underline hover:underline-offset-2">
-                                          Edit
-                                        </button>
-                                        <button className="mx-2 hover:underline hover:underline-offset-2">
-                                          Delete
-                                        </button>
-                                      </div>
-                                    </td>
-                                  </tr>
-                                  {items.map((item) => {
-                                    return (
-                                      item.ChildId === child.id && (
-                                        <tr
-                                          key={item.id}
-                                          colSpan={4}
-                                          className={`${
-                                            chi.id === child.id &&
-                                            chi.open === true
-                                              ? ""
-                                              : "collapse"
-                                          } bg-neutral-600 text-neutral-100 cursor-pointer hover:bg-neutral-700 dark:bg-neutral-900 dark:border-gray-700`}
-                                        >
-                                          <th
-                                            scope="row"
-                                            className="ps-20 py-4 font-medium whitespace-nowrap dark:text-white"
-                                          >
-                                            {item.name}
-                                          </th>
-                                          <td className="px-14 py-4 text-neutral-100 text-sm">
-                                            {item.description}
-                                          </td>
-                                          <td className="text-start">
-                                            <div className="flex w-full justify-around items-center">
-                                              <button
-                                                type="button"
-                                                data-modal-target="addModal"
-                                                data-modal-toggle="addModal"
-                                                className="mx-2 hover:underline hover:underline-offset-2"
-                                                onClick={() =>
-                                                  handleAdd(
-                                                    category.id,
-                                                    parent.id,
-                                                    child.id,
-                                                    item.id
-                                                  )
-                                                }
-                                              >
-                                                Add
-                                              </button>
-                                              <button className="mx-2 hover:underline hover:underline-offset-2">
-                                                Edit
-                                              </button>
-                                              <button className="mx-2 hover:underline hover:underline-offset-2">
-                                                Delete
-                                              </button>
-                                            </div>
-                                          </td>
-                                        </tr>
-                                      )
-                                    );
-                                  })}
-                                </>
-                              )
-                            );
-                          })}
-                        </>
-                      )
-                    );
-                  })}
-                </>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-
+      {/* Add Modal */}
       <Modal
-        hideAddModal={hideAddModal}
-        showAddModal={showAddModal}
-        addData={addData}
-      />
+        open={modal}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        className="min-h-screen h-fit"
+      >
+        <Box sx={modalStyle} className="">
+          <h1 className="text-black h-12">Hi</h1>
+          <h1 className="text-black h-12">Hi</h1>
+          <h1 className="text-black h-12">Hi</h1>
+          <h1 className="text-black h-12">Hi</h1>
+          <h1 className="text-black h-12">Hi</h1>
+          <h1 className="text-black h-12">Hi</h1>
+          <h1 className="text-black h-12">Hi</h1>
+        </Box>
+      </Modal>
     </div>
   );
 }
+
+export const useFunctionsContext = () => useContext(FunctionsContext);
