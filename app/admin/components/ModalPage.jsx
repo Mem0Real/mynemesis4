@@ -6,7 +6,12 @@ import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import create from "./createCategory";
 
-export default function ModalPage({ modal, handleModalClose, addData, setAddData }) {
+export default function ModalPage({
+  modal,
+  handleModalClose,
+  addData,
+  setAddData,
+}) {
   const [data, setData] = useState({});
   const [imageSrc, setImageSrc] = useState();
   const [uploadData, setUploadData] = useState();
@@ -70,7 +75,7 @@ export default function ModalPage({ modal, handleModalClose, addData, setAddData
               type="button"
               className="absolute top-6 right-2 md:top-5 md:right-5 text-black bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
               data-modal-hide="authentication-modal"
-              onClick={() => handleClose()}
+              onClick={() => handleModalClose()}
             >
               <svg
                 aria-hidden="true"
