@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/db";
+import prisma from "@/db";
 
 export async function DELETE(request, response) {
   const { searchParams } = new URL(request.url);
@@ -8,13 +8,6 @@ export async function DELETE(request, response) {
   const parId = searchParams.get("parId");
   const chiId = searchParams.get("chiId");
   const itId = searchParams.get("itId");
-
-  console.log(catId);
-  console.log(parId);
-  console.log(chiId);
-  console.log(itId);
-  console.log(entry);
-
   let toDelete;
 
   if (itId) toDelete = itId;
@@ -37,7 +30,7 @@ export async function DELETE(request, response) {
         id: toDelete,
       },
     });
-    console.log("deleted");
+    console.log("Deleted");
     const message = `${toDelete} has been deleted.`;
     return NextResponse.json({ data: { message }, status: 204 });
   } else {

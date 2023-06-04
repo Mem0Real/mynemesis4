@@ -4,16 +4,19 @@ import React, { useState, useRef, createContext, useContext } from "react";
 
 import Button from "@mui/material/Button";
 import ListTable from "./components/ListTable";
-import ModalPage from "./components/ModalPage";
+import AddModal from "./components/AddModal";
 import AlertPage from "./components/AlertPage";
+import EditModal from "./components/EditModal";
 
 const FunctionsContext = createContext({});
 
 export default function List({ closeList, data }) {
   const [alertDialog, setAlertDialog] = useState(false);
-  const [modal, setModal] = useState(false);
+  const [addModal, setAddModal] = useState(false);
   const [addData, setAddData] = useState({});
   const [deleteData, setDeleteData] = useState({});
+  const [editModal, setEditModal] = useState(false);
+  const [editData, setEditData] = useState({});
 
   const [imageSrc, setImageSrc] = useState();
   const [uploadData, setUploadData] = useState();
@@ -46,9 +49,41 @@ export default function List({ closeList, data }) {
     categoryId && setAddData({ entry: entry, categories: categoryId });
     parentId && setAddData({ entry: entry, parents: parentId });
     childId && setAddData({ entry: entry, children: childId });
-    setModal(true);
+    setAddModal(true);
   };
-  const Edit = (e) => {};
+  const Edit = (
+    entry,
+    // category = null,
+    // parent = null,
+    // child = null,
+    // item = null
+    data = null
+  ) => {
+    //   category && setEditData({ entry: entry, toEdit: category });
+    //   parent && setEditData({ entry: entry, toEdit: parent });
+    //   child && setEditData({ entry: entry, toEdit: child });
+    //   item && setEditData({ entry: entry, toEdit: item });
+    setEditData({
+      entry: entry,
+      id: data.id,
+      name: data.name,
+      description: data.description,
+      image: data.image,
+    });
+    if (entry === "items") {
+      setEditData((editData) => {
+        return {
+          ...editData,
+          brand: data.brand,
+          model: data.model,
+          quantity: data.quantity,
+          price: data.price,
+        };
+      });
+    }
+    setEditModal(true);
+  };
+
   const Delete = (
     entry,
     category = null,
@@ -75,7 +110,8 @@ export default function List({ closeList, data }) {
     setAlertDialog(true);
   };
 
-  const handleModalClose = () => setModal(false);
+  const closeAddModal = () => setAddModal(false);
+  const closeEditModal = () => setEditModal(false);
 
   const handleOnChange = (changeEvent) => {
     const reader = new FileReader();
@@ -193,11 +229,19 @@ export default function List({ closeList, data }) {
       </FunctionsContext.Provider>
 
       {/* Add Modal */}
-      <ModalPage
-        modal={modal}
-        handleModalClose={handleModalClose}
+      <AddModal
+        modal={addModal}
+        closeAddModal={closeAddModal}
         addData={addData}
         setAddData={setAddData}
+      />
+
+      {/* Edit Modal */}
+      <EditModal
+        modal={editModal}
+        closeEditModal={closeEditModal}
+        editData={editData}
+        setEditData={setEditData}
       />
 
       {/* Delete Alert */}

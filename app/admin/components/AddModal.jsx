@@ -6,9 +6,9 @@ import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import create from "./createCategory";
 
-export default function ModalPage({
+export default function AddModal({
   modal,
-  handleModalClose,
+  closeAddModal,
   addData,
   setAddData,
 }) {
@@ -63,7 +63,7 @@ export default function ModalPage({
   return (
     <Modal
       open={modal}
-      onClose={handleModalClose}
+      onClose={closeAddModal}
       aria-labelledby="Add Modal"
       aria-describedby="Create a new category"
       className="absolute w-3/4 py-6 mt-12 md:mt-0 md:w-1/2 md:py-3 mx-auto overflow-y-auto rounded-lg"
@@ -75,7 +75,7 @@ export default function ModalPage({
               type="button"
               className="absolute top-6 right-2 md:top-5 md:right-5 text-black bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
               data-modal-hide="authentication-modal"
-              onClick={() => handleModalClose()}
+              onClick={() => closeAddModal()}
             >
               <svg
                 aria-hidden="true"

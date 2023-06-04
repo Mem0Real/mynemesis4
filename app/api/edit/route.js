@@ -6,24 +6,10 @@ import * as dateFn from "date-fns";
 import prisma from "@/db";
 
 export async function POST(request, response) {
-  //   const data = await request.json();
-  //   console.log(data);
-  //   try {
-  //     let data = await request.formData();
-  //     return NextResponse.json({ data, message: "Success" });
-  //   } catch (e) {
-  //     console.log(e);
-  //     return NextResponse.json({ message: "Fail" });
-  //   }
-  //   const file = await request.formData();
-  //   console.log(file);
-
   let formData = await request.formData();
   let file = formData.get("image");
   let entry = formData.get("entry");
-  let categoryId = formData.get("categories");
-  let parentId = formData.get("parents");
-  let childId = formData.get("children");
+
   let name = formData.get("name");
 
   let brand = formData.get("brand");
@@ -48,7 +34,7 @@ export async function POST(request, response) {
   let description = formData.get("description");
   let image = formData.get("image");
 
-  let category, parent, child;
+  let category = { name: undefined, val: undefined };
 
   //   Write to databse
   const writeToDb = async (dir) => {
@@ -69,23 +55,11 @@ export async function POST(request, response) {
       description = formData.get("description");
     }
 
-    if (categoryId !== null) {
-      category = { name: "CategoryId", val: categoryId };
-    } else if (parentId !== null) {
-      category = { name: "ParentId", val: parentId };
-    } else if (childId !== null) {
-      category = { name: "ChildId", val: childId };
-    } else {
-      category.name = undefined;
-      category.val = undefined;
-    }
-
-    if (entry === "items") {
-    }
     const exist = await checkExistence(id);
 
-    if (!exist) {
-      const res = await prisma[entry].create({
+    if (exist) {
+      const res = await prisma[entry].update({
+        where: { id: id },
         data: {
           id: id,
           name: name,
@@ -95,31 +69,30 @@ export async function POST(request, response) {
           price: price,
           description: description,
           image: image,
-          [category.name]: category.val,
         },
       });
-      return res;
-    } else return { message: `"${name}" Already Exists.` };
+      return NextResponse.json({ message: `${name} updated successfully` });
+    } else return NextResponse.json({ message: `"${name}" Already Exists.` });
 
     // return NextResponse.json(res);
   };
 
-  const checkExistence = async (id, name) => {
-    const result = await prisma[entry].findUnique({
+  const checkExistence = async (id) => {
+    const result = await prisma[entry].findMany({
       where: { id: id },
     });
 
     return result;
   };
 
+  console.log(id, name, description, image);
+
   if (!file) {
     writeToDb("").then((data) =>
       NextResponse.json({ data: data, message: "Created Db Successfully." })
     );
-    // return NextResponse.json(
-    //   { error: "File blob is required." },
-    //   { status: 400 }
-    // );
+  } else if (typeof file === "string") {
+    writeToDb(file);
   } else {
     const buffer = Buffer.from(await file.arrayBuffer());
     const relativeUploadDir = `/uploads/${dateFn.format(

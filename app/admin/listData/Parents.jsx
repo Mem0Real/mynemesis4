@@ -81,7 +81,7 @@ export default function Parents({
                           <AddOutlined />
                         </button>
                         <button
-                          onClick={() => Edit(category.id, parent.id)}
+                          onClick={() => Edit("parents", parent)}
                           className="text-blue-500"
                         >
                           <EditOutlined />

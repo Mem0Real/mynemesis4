@@ -60,7 +60,7 @@ export default function Categories({
                 <AddOutlined />
               </button>
               <button
-                onClick={() => Edit(category.id)}
+                onClick={() => Edit("categories", category)}
                 className="text-blue-500"
               >
                 <EditOutlined />

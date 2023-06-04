@@ -13,7 +13,6 @@ export default function AlertDialog({
   setDeleteData,
 }) {
   let dd = { entry: null, id: null, name: null };
-  console.log(deleteData);
   if (deleteData.entry === "items") {
     dd.entry = deleteData.entry;
     dd.id = deleteData.itemId;

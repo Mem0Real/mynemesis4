@@ -3,14 +3,13 @@ import mime from "mime";
 import { join } from "path";
 import { stat, mkdir, writeFile } from "fs/promises";
 import * as dateFn from "date-fns";
-import { prisma } from "@/db";
+import prisma from "@/db";
 
 export async function POST(request, response) {
-
   let formData = await request.formData();
   let file = formData.get("image");
   let entry = formData.get("entry");
- 
+
   let categoryId = formData.get("categories");
   let parentId = formData.get("parents");
   let childId = formData.get("children");
@@ -74,22 +73,42 @@ export async function POST(request, response) {
     }
     const exist = await checkExistence(id);
 
-    if (!exist) {
-      const res = await prisma[entry].create({
-        data: {
-          id: id,
-          name: name,
-          brand: brand,
-          model: model,
-          quantity: quantity,
-          price: price,
-          description: description,
-          image: image,
-          [category.name]: category.val,
-        },
+    try {
+      if (!exist) {
+        const res = await prisma[entry].create({
+          data: {
+            id: id,
+            name: name,
+            brand: brand,
+            model: model,
+            quantity: quantity,
+            price: price,
+            description: description,
+            image: image,
+            [category.name]: category.val,
+          },
+        });
+        let json_response = {
+          status: "success",
+          results: res.length,
+          res,
+        };
+        return NextResponse.json(json_response);
+      } else {
+        return NextResponse(
+          JSON.stringify({ status: 500, message: `Category already exists.` })
+        );
+      }
+    } catch (error) {
+      let error_response = {
+        status: "fail",
+        message: error.message,
+      };
+      return new NextResponse(JSON.stringify(error_response), {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
       });
-      return res;
-    } else return { message: `"${name}" Already Exists.` };
+    }
 
     // return NextResponse.json(res);
   };
