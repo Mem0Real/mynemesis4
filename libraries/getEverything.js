@@ -1,13 +1,20 @@
 import prisma from "@/db";
 
 export default async function getEverything() {
-  const res = await fetch("http://localhost:3000/api/getAll", {
-    next: { revalidate: 10 },
+  const categories = prisma.categories.findMany({
+    // include: { parents: true },
   });
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error("Failed to fetch data");
-  }
 
-  return res.json();
+  const parents = prisma.parents.findMany({
+    // include: { children: true },
+  });
+
+  const children = prisma.children.findMany({
+    // include: { items: true },
+  });
+
+  const items = prisma.items.findMany({});
+
+  const data = Promise.all([categories, parents, children, items]);
+  return data;
 }
