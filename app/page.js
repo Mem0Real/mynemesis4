@@ -2,7 +2,6 @@ import Sidebar from "./components/navigation/Sidebar";
 import { Suspense } from "react";
 import Link from "next/link";
 import { Loader } from "./components/loader/Loader";
-import Drawer from "./components/navigation/Drawer";
 
 export default async function Home() {
   return (
@@ -17,7 +16,6 @@ export default async function Home() {
           <h1 className="text-yellow-300">Home Page</h1>
           <p>
             <Link href="/categories">Categories</Link>
-            <Drawer />
           </p>
         </div>
       </div>
