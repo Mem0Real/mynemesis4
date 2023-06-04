@@ -34,7 +34,7 @@ export default function Children({
   const { Add, Edit, Delete } = useFunctionsContext();
 
   return (
-    <Table size="medium" aria-label="parents">
+    <Table size="large" aria-label="children">
       <TableHead>
         <TableRow>
           <TableCell></TableCell>

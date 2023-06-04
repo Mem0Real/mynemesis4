@@ -18,11 +18,11 @@ export default function Items({ data, category, parent, child }) {
   const { Add, Edit, Delete } = useFunctionsContext();
   return (
     <>
-      <Table size="medium" aria-label="parents">
+      <Table size="medium" aria-label="items">
         <TableHead>
           <TableRow>
             <TableCell>
-              <p className="font-bold">Item Name</p>
+              <p className="font-bold px-16">Item Name</p>
             </TableCell>
             <TableCell>
               <p className="font-bold">Brand Name</p>

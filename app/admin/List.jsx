@@ -70,7 +70,8 @@ export default function List({ closeList, data }) {
       });
     child &&
       setDeleteData({ entry: entry, childId: child.id, childName: child.name });
-    item && setDeleteData({ entry: entry, itemId: item.id, itemName: item.name });
+    item &&
+      setDeleteData({ entry: entry, itemId: item.id, itemName: item.name });
     setAlertDialog(true);
   };
 
@@ -177,7 +178,7 @@ export default function List({ closeList, data }) {
       </h1>
       {/* Table */}
       <FunctionsContext.Provider value={{ Add, Edit, Delete }}>
-        <div className="md:my-6 mb-6 shadow-md shadow-black">
+        <div className="md:my-6 mb-6 md:pb-5 shadow-md shadow-black">
           <ListTable data={data} add={Add} edit={Edit} delete={Delete} />
           <div className="flex flex-col w-full justify-center items-center md:mt-3">
             <Button

@@ -15,7 +15,7 @@ export default function Actions({ data }) {
   return !showList ? (
     <div className="flex flex-col w-full min-h-screen justify-start items-center">
       <p>What Would You Like To Do?</p>
-      <div className="w-full flex-col h-56 md:h-24 justify-end items-end md:my-6 text-center">
+      <div className="w-full flex flex-col md:flex-row h-48 md:h-24 justify-between md:justify-evenly items-center md:my-6 text-center">
         <Link
           className="px-5 md:mx-5 py-2 rounded-md bg-green-500 text-white"
           href="/admin/create"
@@ -43,7 +43,7 @@ export default function Actions({ data }) {
       </div>
     </div>
   ) : (
-    <div className="flex flex-col w-full px-8 justify-center items-center mx-auto">
+    <div className="flex flex-col w-full md:px-8 px-2 justify-center items-center mx-auto">
       <Suspense fallback={<h1>Loading...</h1>}>
         <List data={data} closeList={closeList} />
       </Suspense>
