@@ -5,13 +5,15 @@ import React, { useState, useRef, createContext, useContext } from "react";
 import Button from "@mui/material/Button";
 import ListTable from "./components/ListTable";
 import ModalPage from "./components/ModalPage";
+import AlertPage from "./components/AlertPage";
 
 const FunctionsContext = createContext({});
 
 export default function List({ closeList, data }) {
-  const [open, setOpen] = useState(false);
+  const [alertDialog, setAlertDialog] = useState(false);
   const [modal, setModal] = useState(false);
   const [addData, setAddData] = useState({});
+  const [deleteData, setDeleteData] = useState({});
 
   const [imageSrc, setImageSrc] = useState();
   const [uploadData, setUploadData] = useState();
@@ -47,9 +49,32 @@ export default function List({ closeList, data }) {
     setModal(true);
   };
   const Edit = (e) => {};
-  const Delete = (e) => {};
+  const Delete = (
+    entry,
+    category = null,
+    parent = null,
+    child = null,
+    item = null
+  ) => {
+    category &&
+      setDeleteData({
+        entry: entry,
+        categoryId: category.id,
+        categoryName: category.name,
+      });
+    parent &&
+      setDeleteData({
+        entry: entry,
+        parentId: parent.id,
+        parentName: parent.name,
+      });
+    child &&
+      setDeleteData({ entry: entry, childId: child.id, childName: child.name });
+    item && setDeleteData({ entry: entry, itemId: item.id, itemName: item.name });
+    setAlertDialog(true);
+  };
 
-  const handleClose = () => setModal(false);
+  const handleModalClose = () => setModal(false);
 
   const handleOnChange = (changeEvent) => {
     const reader = new FileReader();
@@ -131,7 +156,10 @@ export default function List({ closeList, data }) {
         setChi({ id: childId, open: !chi.open });
       }
     }
-    console.log(chi);
+  };
+
+  const handleCloseAlert = () => {
+    setAlertDialog(false);
   };
 
   return (
@@ -164,12 +192,19 @@ export default function List({ closeList, data }) {
       </FunctionsContext.Provider>
 
       {/* Add Modal */}
-
       <ModalPage
         modal={modal}
-        handleClose={handleClose}
+        handleModalClose={handleModalClose}
         addData={addData}
         setAddData={setAddData}
+      />
+
+      {/* Delete Alert */}
+      <AlertPage
+        handleCloseAlert={handleCloseAlert}
+        deleteData={deleteData}
+        setDeleteData={setDeleteData}
+        alertDialog={alertDialog}
       />
     </div>
   );

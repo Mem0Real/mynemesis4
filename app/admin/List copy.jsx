@@ -122,7 +122,6 @@ export default function List({ closeList, data }) {
         setCat({ id: categoryId, open: !cat.open });
       }
     }
-    console.log(cat);
   };
 
   const parDropDown = (parentId) => {
@@ -160,7 +159,6 @@ export default function List({ closeList, data }) {
         setChi({ id: childId, open: !chi.open });
       }
     }
-    console.log(chi);
   };
 
   return (

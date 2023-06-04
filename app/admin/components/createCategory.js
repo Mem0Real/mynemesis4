@@ -5,7 +5,7 @@ export default async function createCategory(data) {
   Object.entries(data).forEach(([key, value]) => {
     formData.append(key, value);
   });
-  fetch("/api/upload", {
+  fetch("/api/create", {
     method: "POST",
     body: formData,
   })

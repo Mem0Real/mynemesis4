@@ -74,7 +74,9 @@ export default function Parents({
                       <div className="flex justify-evenly items-center">
                         <button
                           className="text-green-500"
-                          onClick={() => Add("children", category.id, parent.id)}
+                          onClick={() =>
+                            Add("children", category.id, parent.id)
+                          }
                         >
                           <AddOutlined />
                         </button>
@@ -85,7 +87,7 @@ export default function Parents({
                           <EditOutlined />
                         </button>
                         <button
-                          onClick={() => Delete(category.id, parent.id)}
+                          onClick={() => Delete("parents", null, parent)}
                           className="text-red-500"
                         >
                           <DeleteForeverOutlined />

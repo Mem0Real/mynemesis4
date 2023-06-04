@@ -6,17 +6,6 @@ import * as dateFn from "date-fns";
 import { prisma } from "@/db";
 
 export async function POST(request, response) {
-  //   const data = await request.json();
-  //   console.log(data);
-  //   try {
-  //     let data = await request.formData();
-  //     return NextResponse.json({ data, message: "Success" });
-  //   } catch (e) {
-  //     console.log(e);
-  //     return NextResponse.json({ message: "Fail" });
-  //   }
-  //   const file = await request.formData();
-  //   console.log(file);
 
   let formData = await request.formData();
   let file = formData.get("image");
@@ -51,8 +40,6 @@ export async function POST(request, response) {
 
   let category = { name: undefined, val: undefined };
 
-  console.log(entry, id, name, description, image);
-
   //   Write to databse
   const writeToDb = async (dir) => {
     formData.set("image", dir);
@@ -74,7 +61,6 @@ export async function POST(request, response) {
 
     if (childId !== null) {
       category = { name: "ChildId", val: childId };
-      console.log(childId);
     } else if (parentId !== null) {
       category = { name: "ParentId", val: parentId };
     } else if (categoryId !== null) {

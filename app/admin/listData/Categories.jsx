@@ -66,7 +66,7 @@ export default function Categories({
                 <EditOutlined />
               </button>
               <button
-                onClick={() => Delete(category.id)}
+                onClick={() => Delete("categories", category)}
                 className="text-red-500"
               >
                 <DeleteForeverOutlined />
@@ -95,7 +95,6 @@ export default function Categories({
           </Collapse>
         </TableCell>
       </TableRow>
-
     </>
   ));
 }

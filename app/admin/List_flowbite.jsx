@@ -49,7 +49,6 @@ export default function List({ closeList, data }) {
         setCat({ id: categoryId, open: !cat.open });
       }
     }
-    console.log(cat);
   };
 
   const parDropDown = (parentId) => {

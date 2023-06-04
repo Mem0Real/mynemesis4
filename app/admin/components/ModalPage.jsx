@@ -4,9 +4,9 @@ import Modal from "@mui/material/Modal";
 
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import createCategory from "../create/createCategory";
+import create from "./createCategory";
 
-export default function ModalPage({ modal, handleClose, addData, setAddData }) {
+export default function ModalPage({ modal, handleModalClose, addData, setAddData }) {
   const [data, setData] = useState({});
   const [imageSrc, setImageSrc] = useState();
   const [uploadData, setUploadData] = useState();
@@ -38,18 +38,13 @@ export default function ModalPage({ modal, handleClose, addData, setAddData }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    let res = await createCategory(data);
-    //   .then(setData({}))
-    //   .then(setImageSrc())
-    //   .then(setAddData({}))
-
-    // setData({});
-    // setImageSrc();
-    // setAddData({});
+    let res = await create(data)
+      .then(setData({}))
+      .then(setImageSrc())
+      .then(setAddData({}));
   };
 
   let title;
-  console.log(addData);
   if (addData.categories) {
     title = addData.categories;
     title = title[0].toUpperCase() + title.slice(1);
@@ -63,7 +58,7 @@ export default function ModalPage({ modal, handleClose, addData, setAddData }) {
   return (
     <Modal
       open={modal}
-      onClose={handleClose}
+      onClose={handleModalClose}
       aria-labelledby="Add Modal"
       aria-describedby="Create a new category"
       className="absolute w-3/4 py-6 mt-12 md:mt-0 md:w-1/2 md:py-3 mx-auto overflow-y-auto rounded-lg"
