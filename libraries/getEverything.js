@@ -1,17 +1,13 @@
 import prisma from "@/db";
 
+export const revalidate = 10;
+
 export default async function getEverything() {
-  const categories = prisma.categories.findMany({
-    // include: { parents: true },
-  });
+  const categories = prisma.categories.findMany({});
 
-  const parents = prisma.parents.findMany({
-    // include: { children: true },
-  });
+  const parents = prisma.parents.findMany({});
 
-  const children = prisma.children.findMany({
-    // include: { items: true },
-  });
+  const children = prisma.children.findMany({});
 
   const items = prisma.items.findMany({});
 

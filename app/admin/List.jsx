@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useState, useRef, createContext, useContext } from "react";
+import React, {
+  useState,
+  useRef,
+  createContext,
+  useContext,
+  useEffect,
+} from "react";
 
 import Button from "@mui/material/Button";
 import ListTable from "./components/ListTable";
@@ -9,6 +15,7 @@ import AlertPage from "./components/AlertPage";
 import EditModal from "./components/EditModal";
 
 const FunctionsContext = createContext({});
+export const revalidate = 5;
 
 export default function List({ closeList, data }) {
   const [alertDialog, setAlertDialog] = useState(false);
@@ -51,18 +58,7 @@ export default function List({ closeList, data }) {
     childId && setAddData({ entry: entry, children: childId });
     setAddModal(true);
   };
-  const Edit = (
-    entry,
-    // category = null,
-    // parent = null,
-    // child = null,
-    // item = null
-    data = null
-  ) => {
-    //   category && setEditData({ entry: entry, toEdit: category });
-    //   parent && setEditData({ entry: entry, toEdit: parent });
-    //   child && setEditData({ entry: entry, toEdit: child });
-    //   item && setEditData({ entry: entry, toEdit: item });
+  const Edit = (entry, data = null) => {
     setEditData({
       entry: entry,
       id: data.id,

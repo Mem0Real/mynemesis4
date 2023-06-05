@@ -14,6 +14,7 @@ export default function EditModal({
   setEditData,
 }) {
   const [data, setData] = useState({});
+  const [status, setStatus] = useState({});
   const [imageSrc, setImageSrc] = useState();
   const [uploadData, setUploadData] = useState();
 
@@ -45,10 +46,12 @@ export default function EditModal({
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    let res = await editCategory(data);
-    // .then(setData({}))
-    // .then(setImageSrc())
-    // .then(setEditData({}));
+    editCategory(data)
+      .then((res) => setStatus(res))
+      .then(setData({}))
+      .then(setImageSrc())
+      .then(setEditData({}));
+    console.log(status);
   };
 
   let title = data.id;
