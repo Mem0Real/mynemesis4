@@ -1,4 +1,4 @@
-import getEverything from "@/libraries/getEverything_fetch";
+import getEverything from "@/libraries/getEverything";
 import Actions from "./Actions";
 
 export default async function AdminPage() {
