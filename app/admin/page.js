@@ -1,6 +1,4 @@
-"use client";
-
-import getEverything from "@/libraries/getEverything";
+import getEverything from "@/libraries/getEverything_fetch";
 import Actions from "./Actions";
 
 export default async function AdminPage() {
