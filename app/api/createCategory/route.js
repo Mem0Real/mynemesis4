@@ -9,6 +9,7 @@ export async function POST(request) {
   let entry = formData.get("entry");
 
   if (!entry) entry = cat;
+  console.log(cat);
 
   let categoryId = formData.get("categories");
   let parentId = formData.get("parents");
