@@ -1,16 +1,18 @@
-import prisma from "@/db";
-
-export const revalidate = 10;
-
 export default async function getEverything() {
-  const categories = prisma.categories.findMany({});
+  const env = process.env.NODE_ENV;
 
-  const parents = prisma.parents.findMany({});
+  const res = await fetch('/api/getAll', {
+    cache: "no-cache",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    return undefined
+  }
 
-  const children = prisma.children.findMany({});
+  const data = await res.json();
 
-  const items = prisma.items.findMany({});
-
-  const data = Promise.all([categories, parents, children, items]);
   return data;
 }
