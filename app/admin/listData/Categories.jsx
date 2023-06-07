@@ -32,8 +32,8 @@ export default function Categories({
   const { Add, Edit, Delete } = useFunctionsContext();
 
   return categories.map((category, index) => (
-    <>
-      <TableRow key={category.name} sx={{ "& > *": { borderBottom: "unset" } }}>
+    <React.Fragment key={category.id}>
+      <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
         <TableCell>
           <IconButton
             aria-label="expand row"
@@ -95,6 +95,6 @@ export default function Categories({
           </Collapse>
         </TableCell>
       </TableRow>
-    </>
+    </React.Fragment>
   ));
 }

@@ -53,6 +53,7 @@ export default function List({ closeList, data }) {
   const Add = (entry, categoryId = null, parentId = null, childId = null) => {
     // Show Add Modal
 
+    !categoryId && !parentId && !childId && setAddData({ entry: entry });
     categoryId && setAddData({ entry: entry, categories: categoryId });
     parentId && setAddData({ entry: entry, parents: parentId });
     childId && setAddData({ entry: entry, children: childId });

@@ -1,9 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import getEntries from "@/libraries/getEntries";
+import { notFound } from "next/navigation";
 
 export default async function CollectionPage() {
   const categories = await getEntries("categories");
+
+  if (!categories[0].name) return notFound();
 
   const content = categories.map((category) => {
     return (

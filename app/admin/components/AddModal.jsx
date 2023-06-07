@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
 import React, { useState, useRef, useEffect } from "react";
+
 import Image from "next/image";
 import create from "./createCategory";
 
@@ -43,10 +44,14 @@ export default function AddModal({
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    let res = await create(data)
+    const addedData = data;
+
+    create(data)
       .then(setData({}))
       .then(setImageSrc())
-      .then(setAddData({}));
+      .then(setAddData({}))
+      .then(() => closeAddModal())
+      .catch((e) => alert("Error creating category"));
   };
 
   let title;
@@ -95,10 +100,11 @@ export default function AddModal({
             <div className="px-2 md:px-11 pb-12 lg:py-6">
               <h3 className="mb-4 py-4 text-xl text-center font-medium text-gray-900 dark:text-white">
                 <p className="mt-5">
-                  Create New Category inside <u>{title}</u>
+                  Create New Category {title && inside + <u> title </u>}
                 </p>
               </h3>
               <form
+                encType="multipart/form-data"
                 method="POST"
                 className="flex flex-col justify-center items-center my-4"
                 onSubmit={handleSubmit}

@@ -13,9 +13,9 @@ export async function generateMetadata({ params: { parent } }) {
   };
 }
 
-export default async function Parent(props) {
-  let currentParent = props.params.parent;
-  let currentCategory = props.params.category;
+export default async function Parent({ params: { parent, category } }) {
+  let currentParent = parent;
+  let currentCategory = category;
   const parentData = await getEntry("parents", currentParent);
 
   const content = (
@@ -36,7 +36,7 @@ export default async function Parent(props) {
       <p className="h-24 text-center mt-4 md:mt-2">{parentData.description}</p>
       <div className="flex-initial min-h-screen w-full">
         <Suspense fallback={<h1>Loading...</h1>}>
-          <Children ParentId={currentParent} CategoryId={currentCategory}/>
+          <Children ParentId={currentParent} CategoryId={currentCategory} />
         </Suspense>
       </div>
     </div>

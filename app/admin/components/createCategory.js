@@ -5,11 +5,21 @@ export default async function createCategory(data) {
   Object.entries(data).forEach(([key, value]) => {
     formData.append(key, value);
   });
-  fetch("/api/create", {
+  fetch("/api/createCategory", {
     method: "POST",
     body: formData,
   })
-    .then((response) => response.json())
-    .then((data) => data)
-    .catch((error) => error);
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error("Error creating category item.");
+      }
+    })
+    .then((data) => {
+      console.log("Server response:", data);
+    })
+    .catch((error) => {
+      console.error("Error creating category item:", error);
+    });
 }

@@ -6,9 +6,14 @@ import * as dateFn from "date-fns";
 import prisma from "@/db";
 
 export async function POST(request, response) {
+  let { searchParams } = new URL(request.url);
+  const cat = searchParams.get("cat");
+
   let formData = await request.formData();
   let file = formData.get("image");
   let entry = formData.get("entry");
+
+  if (!entry) entry = cat;
 
   let categoryId = formData.get("categories");
   let parentId = formData.get("parents");
@@ -69,8 +74,6 @@ export async function POST(request, response) {
       category.val = undefined;
     }
 
-    if (entry === "items") {
-    }
     const exist = await checkExistence(id);
 
     try {
@@ -93,7 +96,21 @@ export async function POST(request, response) {
           results: res.length,
           res,
         };
-        return NextResponse.json(json_response);
+        return new NextResponse.json(res, { status: 200 });
+        // return new NextResponse(
+        //   JSON.stringify(res, {
+        //     status: 200,
+        //     statusText: "Category Created Successfully!",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //       "Access-Control-Allow-Origin": "*",
+        //     },
+        //   })
+        // );
+
+        // return NextResponse.json(json_response);
+
+        return res.json();
       } else {
         return NextResponse(
           JSON.stringify({ status: 500, message: `Category already exists.` })
@@ -109,8 +126,6 @@ export async function POST(request, response) {
         headers: { "Content-Type": "application/json" },
       });
     }
-
-    // return NextResponse.json(res);
   };
 
   const checkExistence = async (id, name) => {
@@ -125,10 +140,6 @@ export async function POST(request, response) {
     writeToDb("").then((data) =>
       NextResponse.json({ data: data, message: "Created Db Successfully." })
     );
-    // return NextResponse.json(
-    //   { error: "File blob is required." },
-    //   { status: 400 }
-    // );
   } else {
     const buffer = Buffer.from(await file.arrayBuffer());
     const relativeUploadDir = `/uploads/${dateFn.format(
@@ -162,8 +173,13 @@ export async function POST(request, response) {
       )}-${uniqueSuffix}.${mime.getExtension(file.type)}`;
       await writeFile(`${uploadDir}/${filename}`, buffer);
       let imageUrl = `${relativeUploadDir}/${filename}`;
-      let dbStat = writeToDb(imageUrl);
-      return dbStat;
+      writeToDb(imageUrl);
+      // return new NextResponse(dbStat, {
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     "Access-Control-Allow-Origin": "*",
+      //   },
+      // });
       // return NextResponse.json({ imgUrl: `${relativeUploadDir}/${filename}` });
     } catch (e) {
       console.error("Error while trying to upload a file\n", e);

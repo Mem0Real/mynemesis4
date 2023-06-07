@@ -2,6 +2,7 @@ import Parents from "./Parents";
 import { Suspense } from "react";
 import Link from "next/link";
 import getEntry from "@/libraries/getEntry";
+import getEntries from "@/libraries/getEntries";
 
 export async function generateMetadata({ params: { category } }) {
   let firstLetter = category[0];
@@ -48,4 +49,11 @@ export default async function Category(category) {
       {content}
     </div>
   );
+}
+
+export async function generateStaticParams(category) {
+  const categories = await getEntries("categories");
+  return categories.map((category) => ({
+    category: category.id.toString(),
+  }));
 }

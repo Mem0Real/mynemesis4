@@ -51,8 +51,8 @@ export default function Children({
         {children.map(
           (child) =>
             child.ParentId == parent.id && (
-              <>
-                <TableRow key={child.id}>
+              <React.Fragment key={child.id}>
+                <TableRow>
                   <TableCell>
                     <IconButton
                       aria-label="expand row"
@@ -125,7 +125,7 @@ export default function Children({
                     </Collapse>
                   </TableCell>
                 </TableRow>
-              </>
+              </React.Fragment>
             )
         )}
       </TableBody>
