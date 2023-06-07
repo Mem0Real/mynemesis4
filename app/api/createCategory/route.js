@@ -142,10 +142,14 @@ export async function POST(request) {
     );
   } else {
     const buffer = Buffer.from(await file.arrayBuffer());
-    const relativeUploadDir = `/uploads/${dateFn.format(
-      Date.now(),
-      "dd-MM-Y"
-    )}`;
+
+    let relativeUploadDir;
+    if (process.env.NODE_ENV === "development") {
+      relativeUploadDir = `/uploads/${dateFn.format(Date.now(), "dd-MM-Y")}`;
+    } else {
+      relativeUploadDir = `/tmp/${dateFn.format(Date.now(), "dd-MM-Y")}`;
+    }
+
     const uploadDir = join(process.cwd(), "public", relativeUploadDir);
 
     try {
