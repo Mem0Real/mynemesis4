@@ -1,6 +1,4 @@
-import prisma from "@/db";
-
-export const revalidate = 10;
+import prisma from "@/prisma";
 
 export default async function getEverything() {
   const categories = prisma.categories.findMany({});

@@ -3,7 +3,7 @@ import mime from "mime";
 import { join } from "path";
 import { stat, mkdir, writeFile } from "fs/promises";
 import * as dateFn from "date-fns";
-import prisma from "@/db";
+import prisma from "@/prisma";
 
 export async function POST(request, response) {
   let { searchParams } = new URL(request.url);

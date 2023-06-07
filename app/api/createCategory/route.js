@@ -1,4 +1,9 @@
 import { NextResponse } from "next/server";
+import mime from "mime";
+import { join } from "path";
+import { stat, mkdir, writeFile } from "fs/promises";
+import * as dateFn from "date-fns";
+import prisma from "@/prisma";
 
 export async function POST(request) {
   let { searchParams } = new URL(request.url);
@@ -9,7 +14,6 @@ export async function POST(request) {
   let entry = formData.get("entry");
 
   if (!entry) entry = cat;
-  console.log(cat);
 
   let categoryId = formData.get("categories");
   let parentId = formData.get("parents");

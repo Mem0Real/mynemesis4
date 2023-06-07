@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import prisma from "@/db";
+import prisma from "@/prisma";
 
 export async function DELETE(request, response) {
   const { searchParams } = new URL(request.url);

@@ -1,6 +1,8 @@
 import getEverything from "@/libraries/getEverything";
 import Actions from "./Actions";
 
+export const revalidate = 10;
+
 export default async function AdminPage() {
   const res = await getEverything();
 

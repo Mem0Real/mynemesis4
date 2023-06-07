@@ -1,4 +1,4 @@
-import prisma from "@/db";
+import prisma from "@/prisma";
 
 export default async function searchEverything(query) {
   const categories = prisma.categories.findMany({

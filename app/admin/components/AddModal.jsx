@@ -5,7 +5,7 @@ import Modal from "@mui/material/Modal";
 import React, { useState, useRef, useEffect } from "react";
 
 import Image from "next/image";
-import create from "./createCategory";
+import createCategory from "./createCategory";
 
 export default function AddModal({
   modal,
@@ -46,7 +46,7 @@ export default function AddModal({
     event.preventDefault();
     const addedData = data;
 
-    create(data)
+    createCategory(data)
       .then(setData({}))
       .then(setImageSrc())
       .then(setAddData({}))
