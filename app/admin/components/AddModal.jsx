@@ -99,9 +99,11 @@ export default function AddModal({
             </button>
             <div className="px-2 md:px-11 pb-12 lg:py-6">
               <h3 className="mb-4 py-4 text-xl text-center font-medium text-gray-900 dark:text-white">
-                <p className="mt-5">
-                  Create New Category {title && inside + <u> title </u>}
-                </p>
+                {title ? (
+                  <p className="mt-5">Create New Category inside {title}</p>
+                ) : (
+                  <p className="mt-5">Create New Category</p>
+                )}
               </h3>
               <form
                 encType="multipart/form-data"
