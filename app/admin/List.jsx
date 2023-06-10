@@ -1,21 +1,14 @@
 "use client";
 
-import React, {
-  useState,
-  useRef,
-  createContext,
-  useContext,
-  useEffect,
-} from "react";
+import React, { useState, useRef, createContext, useContext } from "react";
 
 import Button from "@mui/material/Button";
 import ListTable from "./components/ListTable";
-import AddModal from "./components/AddModal";
-import AlertPage from "./components/AlertPage";
-import EditModal from "./components/EditModal";
+import Add from "./components/AddModal";
+import Delete from "./components/AlertPage";
+import Edit from "./components/EditModal";
 
 const FunctionsContext = createContext({});
-export const revalidate = 5;
 
 export default function List({ closeList, data }) {
   const [alertDialog, setAlertDialog] = useState(false);
@@ -110,88 +103,6 @@ export default function List({ closeList, data }) {
   const closeAddModal = () => setAddModal(false);
   const closeEditModal = () => setEditModal(false);
 
-  const handleOnChange = (changeEvent) => {
-    const reader = new FileReader();
-
-    reader.onload = (onLoadEvent) => {
-      setImageSrc(onLoadEvent.target.result);
-      setUploadData(undefined);
-    };
-
-    reader.readAsDataURL(changeEvent.target.files[0]);
-    setData({ ...data, image: changeEvent.target.files[0] });
-  };
-
-  const handleChange = (e) => {
-    const fieldName = e.target.name;
-    const fieldValue = e.target.value;
-
-    setData({ ...data, [fieldName]: fieldValue });
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    let res = await createCategory(data);
-    setStatus(res);
-    setData({});
-    setAddData({});
-    setImageSrc();
-  };
-
-  const catDropDown = (categoryId) => {
-    if (!cat.id) {
-      setCat({ id: categoryId, open: true });
-    } else {
-      if (cat.id === categoryId) {
-        setCat({ ...cat, open: !cat.open });
-        if (cat.open === true) {
-          setPar({ ...par, open: false });
-          setChi({ ...chi, open: false });
-        }
-      } else {
-        setCat({ ...cat, open: false });
-        setCat({ id: categoryId, open: !cat.open });
-      }
-    }
-  };
-
-  const parDropDown = (parentId) => {
-    !par.id
-      ? setPar({ id: parentId, open: true })
-      : par.id === parentId && setPar({ ...par, open: !par.open });
-
-    if (!par.id) {
-      setPar({ id: parentId, open: true });
-    } else {
-      if (par.id === parentId) {
-        setPar({ ...par, open: !par.open });
-        if (par.open === true) {
-          setChi({ ...chi, open: false });
-        }
-      } else {
-        setPar({ ...par, open: false });
-        setPar({ id: parentId, open: !par.open });
-      }
-    }
-  };
-
-  const childDropDown = (childId) => {
-    !chi.id
-      ? setChi({ id: childId, open: true })
-      : chi.id === childId && setChi({ ...chi, open: !chi.open });
-
-    if (!chi.id) {
-      setChi({ id: childId, open: true });
-    } else {
-      if (chi.id === childId) {
-        setChi({ ...chi, open: !chi.open });
-      } else {
-        setChi({ ...chi, open: false });
-        setChi({ id: childId, open: !chi.open });
-      }
-    }
-  };
-
   const handleCloseAlert = () => {
     setAlertDialog(false);
   };
@@ -226,7 +137,7 @@ export default function List({ closeList, data }) {
       </FunctionsContext.Provider>
 
       {/* Add Modal */}
-      <AddModal
+      <Add
         modal={addModal}
         closeAddModal={closeAddModal}
         addData={addData}
@@ -234,7 +145,7 @@ export default function List({ closeList, data }) {
       />
 
       {/* Edit Modal */}
-      <EditModal
+      <Edit
         modal={editModal}
         closeEditModal={closeEditModal}
         editData={editData}
@@ -242,7 +153,7 @@ export default function List({ closeList, data }) {
       />
 
       {/* Delete Alert */}
-      <AlertPage
+      <Delete
         handleCloseAlert={handleCloseAlert}
         deleteData={deleteData}
         setDeleteData={setDeleteData}

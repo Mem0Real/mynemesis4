@@ -15,7 +15,7 @@ import {
 
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { useFunctionsContext } from "../List";
+import { useFunctionsContext } from "@/app/admin/page";
 import Parents from "./Parents";
 
 export default function Categories({

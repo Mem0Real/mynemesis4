@@ -10,7 +10,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { DeleteForeverOutlined, EditOutlined } from "@mui/icons-material";
 
-import { useFunctionsContext } from "../List";
+import { useFunctionsContext } from "../../../admin/List";
 
 export default function Items({ data, category, parent, child }) {
   const items = data[3];

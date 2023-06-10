@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { Loader } from "../loader/Loader";
-import SidebarData from "../SidebarData";
+import SidebarData from "../(data)/sidebarData/SidebarData";
 
 export default async function Sidebar() {
   return (

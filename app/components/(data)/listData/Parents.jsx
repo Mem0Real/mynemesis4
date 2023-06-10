@@ -18,7 +18,7 @@ import {
 
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { useFunctionsContext } from "../List";
+import { useFunctionsContext } from "../../../admin/List";
 import Children from "./Children";
 
 export default function Parents({

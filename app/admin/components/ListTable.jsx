@@ -10,17 +10,12 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-import Categories from "../listData/Categories";
+import Categories from "@/app/components/(data)/listData/Categories";
 
 export default function ListTable({ data, Add, Edit, Delete }) {
   const [cat, setCat] = useState({});
   const [par, setPar] = useState({});
   const [chi, setChi] = useState({});
-
-  const categories = data[0];
-  const parents = data[1];
-  const children = data[2];
-  const items = data[3];
 
   const catDropDown = (categoryId) => {
     if (!cat.id) {
