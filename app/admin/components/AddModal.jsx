@@ -6,6 +6,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import FormData from "form-data";
 import { useSWRConfig } from "swr";
+import createCategory from "./createCategory";
 
 export default function AddModal({
   modal,
@@ -46,28 +47,12 @@ export default function AddModal({
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const formData = new FormData();
-
-    Object.entries(data).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
-    try {
-      await fetch("/api/createCategory", {
-        method: "POST",
-        body: formData,
-      });
-
-      mutate("/api/getAll");
-      console.log("Updated");
-    } catch (err) {
-      console.log("Error creating item. Please try again later.");
-    }
-
-    // .then(setData({}))
-    // .then(setImageSrc())
-    // .then(setAddData({}))
-    // .then(() => closeAddModal())
-    // .catch((e) => alert("Error creating category"));
+    createCategory(data)
+      .then(() => setData({}))
+      .then(() => setImageSrc())
+      .then(() => setAddData({}))
+      .then(() => closeAddModal())
+      .catch((e) => alert("Error creating category"));
   };
 
   let title;
@@ -132,7 +117,7 @@ export default function AddModal({
                     id="name"
                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                     placeholder=" "
-                    value={data.name}
+                    value={data.name || ""}
                     onChange={handleChange}
                     required
                   />
@@ -152,7 +137,7 @@ export default function AddModal({
                     type="text"
                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                     placeholder=" "
-                    value={data.id}
+                    value={data.id || ""}
                     onChange={handleChange}
                   />
                   <label
@@ -172,7 +157,7 @@ export default function AddModal({
                         type="text"
                         className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" "
-                        value={data.brand}
+                        value={data.brand || ""}
                         onChange={handleChange}
                       />
                       <label
@@ -191,7 +176,7 @@ export default function AddModal({
                         type="text"
                         className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" "
-                        value={data.model}
+                        value={data.model || ""}
                         onChange={handleChange}
                       />
                       <label
@@ -210,7 +195,7 @@ export default function AddModal({
                         type="number"
                         className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" "
-                        value={data.quantity}
+                        value={data.quantity || ""}
                         onChange={handleChange}
                       />
                       <label
@@ -229,7 +214,7 @@ export default function AddModal({
                         type="number"
                         className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" "
-                        value={data.price}
+                        value={data.price || ""}
                         onChange={handleChange}
                       />
                       <label
@@ -250,7 +235,7 @@ export default function AddModal({
                     type="text"
                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                     placeholder=" "
-                    value={data.description}
+                    value={data.description || ""}
                     onChange={handleChange}
                   />
                   <label
@@ -277,14 +262,13 @@ export default function AddModal({
                     ref={imageRef}
                   />
                 </div>
-                <div className="relative z-0 w-2/3 mb-6">
+                <div className="relative z-0 h-24 mb-6">
                   {imageSrc && (
                     <Image
                       src={imageSrc}
-                      width={100}
-                      height={100}
+                      fill={true}
                       alt="Image"
-                      className="mx-auto"
+                      className="object-contain"
                     />
                   )}
                 </div>

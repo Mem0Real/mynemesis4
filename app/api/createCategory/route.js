@@ -105,6 +105,8 @@ export async function POST(request) {
           },
         });
 
+        console.log(res);
+
         // if (entry !== "items") {
         //   message = {
         //     status: 200,
