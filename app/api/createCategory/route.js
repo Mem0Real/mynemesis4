@@ -90,34 +90,41 @@ export async function POST(request) {
     const exist = await checkExistence(id);
 
     if (!exist) {
-      const res = await prisma[entry].create({
-        data: {
-          id: id,
-          name: name,
-          brand: brand,
-          model: model,
-          quantity: quantity,
-          price: price,
-          description: description,
-          image: image,
-          [category.name]: category.val,
-        },
-      });
+      try {
+        const res = await prisma[entry].create({
+          data: {
+            id: id,
+            name: name,
+            brand: brand,
+            model: model,
+            quantity: quantity,
+            price: price,
+            description: description,
+            image: image,
+            [category.name]: category.val,
+          },
+        });
 
-      // if (entry !== "items") {
-      //   message = {
-      //     status: 200,
-      //     message: "Category Created Successfully!",
-      //   };
-      //   return NextResponse.json(res, message);
-      // } else {
-      //   message = {
-      //     status: 200,
-      //     message: "Item Created Successfully!",
-      //   };
-      //   return NextResponse.json(message);
-      // }
-      return res;
+        // if (entry !== "items") {
+        //   message = {
+        //     status: 200,
+        //     message: "Category Created Successfully!",
+        //   };
+        //   return NextResponse.json(res, message);
+        // } else {
+        //   message = {
+        //     status: 200,
+        //     message: "Item Created Successfully!",
+        //   };
+        //   return NextResponse.json(message);
+        // }
+        return new NextResponse("Item Created Successfully", { status: 201 });
+      } catch (error) {
+        return new NextResponse(
+          "Error Creating Item. Please try again later.",
+          { status: 500 }
+        );
+      }
     } else {
       // if (entry !== "items") {
       //   message = {

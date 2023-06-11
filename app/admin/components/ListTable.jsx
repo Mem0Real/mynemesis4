@@ -12,7 +12,7 @@ import Paper from "@mui/material/Paper";
 
 import Categories from "@/app/components/(data)/listData/Categories";
 
-export default function ListTable({ data, Add, Edit, Delete }) {
+export default function ListTable({ data }) {
   const [cat, setCat] = useState({});
   const [par, setPar] = useState({});
   const [chi, setChi] = useState({});
@@ -95,9 +95,6 @@ export default function ListTable({ data, Add, Edit, Delete }) {
               catDropDown={catDropDown}
               parDropDown={parDropDown}
               childDropDown={childDropDown}
-              Add={Add}
-              Edit={Edit}
-              Delete={Delete}
             />
           </TableBody>
         </Table>

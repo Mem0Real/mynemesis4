@@ -1,11 +1,11 @@
 "use client";
+import React, { useState, useRef, useEffect } from "react";
+import Image from "next/image";
+
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-
-import React, { useState, useRef, useEffect } from "react";
-
-import Image from "next/image";
-import createCategory from "./createCategory";
+import FormData from "form-data";
+import { useSWRConfig } from "swr";
 
 export default function AddModal({
   modal,
@@ -22,6 +22,7 @@ export default function AddModal({
   }, [addData]);
 
   const imageRef = useRef();
+  const { mutate } = useSWRConfig();
 
   const handleOnChange = (changeEvent) => {
     const reader = new FileReader();
@@ -44,14 +45,29 @@ export default function AddModal({
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const addedData = data;
 
-    createCategory(data)
-      .then(setData({}))
-      .then(setImageSrc())
-      .then(setAddData({}))
-      .then(() => closeAddModal())
-      .catch((e) => alert("Error creating category"));
+    const formData = new FormData();
+
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+    try {
+      await fetch("/api/createCategory", {
+        method: "POST",
+        body: formData,
+      });
+
+      mutate("/api/getAll");
+      console.log("Updated");
+    } catch (err) {
+      console.log("Error creating item. Please try again later.");
+    }
+
+    // .then(setData({}))
+    // .then(setImageSrc())
+    // .then(setAddData({}))
+    // .then(() => closeAddModal())
+    // .catch((e) => alert("Error creating category"));
   };
 
   let title;
