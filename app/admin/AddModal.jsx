@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import createCategory from "./components/createCategory";
-// import { useSWRConfig } from "swr";
+import { useSWRConfig } from "swr";
 
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -12,19 +12,14 @@ export default function AddModal({
   closeAddModal,
   addData,
   setAddData,
-  listUpdate,
+  // mutateData,
 }) {
-  const [data, setData] = useState({});
   const [imageSrc, setImageSrc] = useState();
   const [uploadData, setUploadData] = useState();
 
-  // const { mutate } = useSWRConfig();
-
-  useEffect(() => {
-    setData(addData);
-  }, [addData]);
-
+  const { mutate } = useSWRConfig();
   const imageRef = useRef();
+
   const handleOnChange = (changeEvent) => {
     const reader = new FileReader();
 
@@ -34,29 +29,31 @@ export default function AddModal({
     };
 
     reader.readAsDataURL(changeEvent.target.files[0]);
-    setData({ ...data, image: changeEvent.target.files[0] });
+    setAddData({ ...addData, image: changeEvent.target.files[0] });
   };
 
   const handleChange = (e) => {
     const fieldName = e.target.name;
     const fieldValue = e.target.value;
 
-    setData({ ...data, [fieldName]: fieldValue });
+    setAddData({ ...addData, [fieldName]: fieldValue });
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const formData = createCategory(data);
+    const formData = createCategory(addData);
     try {
-      await fetch("/api/createCategory", {
+      const res = await fetch("/api/createCategory", {
         method: "POST",
         body: formData,
       });
-      listUpdate();
-      // setData({});
-      // setImageSrc({});
-      // setAddData({});
-      // closeAddModal();
+      if (res.status === 200) {
+        await mutate("/api/getCat");
+      }
+
+      setImageSrc({});
+      setAddData({});
+      closeAddModal();
     } catch (error) {
       console.log(error);
     }
@@ -124,7 +121,7 @@ export default function AddModal({
                     id="name"
                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                     placeholder=" "
-                    value={data.name || ""}
+                    value={addData.name || ""}
                     onChange={handleChange}
                     required
                   />
@@ -144,7 +141,7 @@ export default function AddModal({
                     type="text"
                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                     placeholder=" "
-                    value={data.id || ""}
+                    value={addData.id || ""}
                     onChange={handleChange}
                   />
                   <label
@@ -164,7 +161,7 @@ export default function AddModal({
                         type="text"
                         className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" "
-                        value={data.brand || ""}
+                        value={addData.brand || ""}
                         onChange={handleChange}
                       />
                       <label
@@ -183,7 +180,7 @@ export default function AddModal({
                         type="text"
                         className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" "
-                        value={data.model || ""}
+                        value={addData.model || ""}
                         onChange={handleChange}
                       />
                       <label
@@ -202,7 +199,7 @@ export default function AddModal({
                         type="number"
                         className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" "
-                        value={data.quantity || ""}
+                        value={addData.quantity || ""}
                         onChange={handleChange}
                       />
                       <label
@@ -221,7 +218,7 @@ export default function AddModal({
                         type="number"
                         className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" "
-                        value={data.price || ""}
+                        value={addData.price || ""}
                         onChange={handleChange}
                       />
                       <label
@@ -242,7 +239,7 @@ export default function AddModal({
                     type="text"
                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                     placeholder=" "
-                    value={data.description || ""}
+                    value={addData.description || ""}
                     onChange={handleChange}
                   />
                   <label

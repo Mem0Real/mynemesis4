@@ -3,8 +3,6 @@
 import React, { useState, createContext, useContext } from "react";
 import useSWR from "swr";
 
-import Loading from "../loading";
-
 import Button from "@mui/material/Button";
 import ListTable from "./ListTable";
 import AddModal from "./AddModal";
@@ -22,23 +20,16 @@ export default function AdminPage() {
   const [editModal, setEditModal] = useState(false);
   const [editData, setEditData] = useState({});
 
-  const fetcher = (...args) => fetch(...args).then((res) => res.json());
+  const fetcher = (url) => fetch(url).then((res) => res.json());
 
-  const { data, error, isLoading, mutate, isValidating } = useSWR(
-    "/api/getAll",
-    fetcher,
-    {
-      revalidateOnFocus: false,
-      revalidateOnMount: true,
-    }
-  );
+  const { data, error, isLoading } = useSWR("/api/getCat", fetcher, {
+    revalidateIfStale: true,
+  });
 
-  async function listUpdate() {
+  async function mutateData() {
     console.log("mutate called");
-    console.log("isValidated: ", isValidating);
-    mutate();
+    // mutate();
     console.log(data);
-    console.log("isValidated: ", isValidating);
   }
 
   const Add = (entry, categoryId = null, parentId = null, childId = null) => {
@@ -114,9 +105,8 @@ export default function AdminPage() {
     throw new Error("Failed to load data");
   }
 
-  if (!data) return <Loading />;
   return (
-    <FunctionsContext.Provider value={{ Add, Edit, Delete }}>
+    <FunctionsContext.Provider value={{ Add, Edit, Delete, data }}>
       <div className="flex flex-col w-full justify-center items-center bg-neutral-100 text-neutral-900 md:mt-6">
         <h1 className="text-lg underline underline-offset-2 shadow-inner shadow-black px-5 py-2 rounded-md md:mb-6">
           Admin Page
@@ -128,18 +118,26 @@ export default function AdminPage() {
           </h1>
           {/* Table */}
           <div className="md:my-6 mb-6 md:pb-5 shadow-md shadow-black">
-            {data && (
-              <ListTable data={data} add={Add} edit={Edit} delete={Delete} />
-            )}
+            {/* <ListTable data={data} add={Add} edit={Edit} delete={Delete} /> */}
+            {data &&
+              data.map((category) => (
+                <h1 key={category.id}>{category.name}</h1>
+              ))}
 
             <div className="flex flex-col w-full justify-center items-center md:mt-3">
-              <Button
+              <button
+                className="px-4 py-2 bg-green-500 rounded-md"
+                onClick={() => Add("categories")}
+              >
+                Add Category
+              </button>
+              {/* <Button
                 variant="contained"
                 color="success"
                 onClick={() => Add("categories")}
               >
                 Add Category
-              </Button>
+              </Button> */}
             </div>
           </div>
 
@@ -149,7 +147,7 @@ export default function AdminPage() {
             closeAddModal={closeAddModal}
             addData={addData}
             setAddData={setAddData}
-            listUpdate={listUpdate}
+            // mutateData={mutateData}
           />
 
           {/* Edit Modal */}

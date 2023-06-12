@@ -85,8 +85,6 @@ export async function POST(request, response) {
     return result;
   };
 
-  console.log(id, name, description, image);
-
   if (!file) {
     writeToDb("").then((data) =>
       NextResponse.json({ data: data, message: "Created Db Successfully." })
