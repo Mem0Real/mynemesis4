@@ -10,7 +10,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-import Categories from "@/app/components/(data)/listData/Categories";
+import Categories from "@/app/admin/components/listData/Categories";
 
 export default function ListTable({ data }) {
   const [cat, setCat] = useState({});

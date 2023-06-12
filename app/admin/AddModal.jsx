@@ -1,30 +1,30 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
+import createCategory from "./components/createCategory";
+// import { useSWRConfig } from "swr";
 
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import FormData from "form-data";
-import { useSWRConfig } from "swr";
-import createCategory from "./createCategory";
 
 export default function AddModal({
   modal,
   closeAddModal,
   addData,
   setAddData,
+  listUpdate,
 }) {
   const [data, setData] = useState({});
   const [imageSrc, setImageSrc] = useState();
   const [uploadData, setUploadData] = useState();
+
+  // const { mutate } = useSWRConfig();
 
   useEffect(() => {
     setData(addData);
   }, [addData]);
 
   const imageRef = useRef();
-  const { mutate } = useSWRConfig();
-
   const handleOnChange = (changeEvent) => {
     const reader = new FileReader();
 
@@ -46,13 +46,20 @@ export default function AddModal({
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    createCategory(data)
-      .then(() => setData({}))
-      .then(() => setImageSrc())
-      .then(() => setAddData({}))
-      .then(() => closeAddModal())
-      .catch((e) => alert("Error creating category"));
+    const formData = createCategory(data);
+    try {
+      await fetch("/api/createCategory", {
+        method: "POST",
+        body: formData,
+      });
+      listUpdate();
+      // setData({});
+      // setImageSrc({});
+      // setAddData({});
+      // closeAddModal();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   let title;
@@ -262,16 +269,17 @@ export default function AddModal({
                     ref={imageRef}
                   />
                 </div>
-                <div className="relative z-0 h-24 mb-6">
-                  {imageSrc && (
+                {imageSrc && (
+                  <div className="relative h-56 w-56 mb-6">
                     <Image
                       src={imageSrc}
                       fill={true}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       alt="Image"
                       className="object-contain"
                     />
-                  )}
-                </div>
+                  </div>
+                )}
                 <button
                   type="submit"
                   className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"

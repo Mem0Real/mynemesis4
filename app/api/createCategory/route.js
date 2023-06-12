@@ -104,22 +104,6 @@ export async function POST(request) {
             [category.name]: category.val,
           },
         });
-
-        console.log(res);
-
-        // if (entry !== "items") {
-        //   message = {
-        //     status: 200,
-        //     message: "Category Created Successfully!",
-        //   };
-        //   return NextResponse.json(res, message);
-        // } else {
-        //   message = {
-        //     status: 200,
-        //     message: "Item Created Successfully!",
-        //   };
-        //   return NextResponse.json(message);
-        // }
         return new NextResponse("Item Created Successfully", { status: 201 });
       } catch (error) {
         return new NextResponse(
@@ -141,7 +125,7 @@ export async function POST(request) {
       //   };
       //   return NextResponse.json(message);
       // }
-      return (message = { msg: "Already Exists." });
+      return new NextResponse("Item Already Exists", { status: 500 });
     }
   };
 

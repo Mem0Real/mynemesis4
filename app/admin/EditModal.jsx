@@ -4,8 +4,7 @@ import Modal from "@mui/material/Modal";
 
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import createCategory from "./createCategory";
-import editCategory from "./editCategory";
+import editCategory from "./components/editCategory";
 
 export default function EditModal({
   modal,

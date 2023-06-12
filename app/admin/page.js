@@ -6,10 +6,11 @@ import useSWR from "swr";
 import Loading from "../loading";
 
 import Button from "@mui/material/Button";
-import ListTable from "./components/ListTable";
-import AddModal from "./components/AddModal";
-import DeleteModal from "./components/DeleteModal";
-import EditModal from "./components/EditModal";
+import ListTable from "./ListTable";
+import AddModal from "./AddModal";
+import DeleteModal from "./DeleteModal";
+import EditModal from "./EditModal";
+import LoadingIndicator from "../utils/LoadingIndicator";
 
 const FunctionsContext = createContext({});
 
@@ -23,9 +24,22 @@ export default function AdminPage() {
 
   const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
-  const { data, error, isLoading } = useSWR("/api/getAll", fetcher, {
-    revalidateOnFocus: false,
-  });
+  const { data, error, isLoading, mutate, isValidating } = useSWR(
+    "/api/getAll",
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateOnMount: true,
+    }
+  );
+
+  async function listUpdate() {
+    console.log("mutate called");
+    console.log("isValidated: ", isValidating);
+    mutate();
+    console.log(data);
+    console.log("isValidated: ", isValidating);
+  }
 
   const Add = (entry, categoryId = null, parentId = null, childId = null) => {
     // Show Add Modal
@@ -36,6 +50,7 @@ export default function AdminPage() {
     childId && setAddData({ entry: entry, children: childId });
     setAddModal(true);
   };
+
   const Edit = (entry, data = null) => {
     setEditData({
       entry: entry,
@@ -88,7 +103,17 @@ export default function AdminPage() {
   const closeEditModal = () => setEditModal(false);
   const handleCloseAlert = () => setAlertDialog(false);
 
-  // if (isLoading) return <Loading />;
+  if (isLoading)
+    return (
+      <div className="flex flex-col justify-center items-center w-full min-h-screen">
+        <LoadingIndicator />
+      </div>
+    );
+
+  if (error) {
+    throw new Error("Failed to load data");
+  }
+
   if (!data) return <Loading />;
   return (
     <FunctionsContext.Provider value={{ Add, Edit, Delete }}>
@@ -124,6 +149,7 @@ export default function AdminPage() {
             closeAddModal={closeAddModal}
             addData={addData}
             setAddData={setAddData}
+            listUpdate={listUpdate}
           />
 
           {/* Edit Modal */}
