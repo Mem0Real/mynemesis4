@@ -17,19 +17,12 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useFunctionsContext } from "@/app/admin/page";
 import Parents from "./Parents";
+import { useListContext } from "../../ListTable";
 
-export default function Categories({
-  data,
-  cat,
-  par,
-  chi,
-  catDropDown,
-  parDropDown,
-  childDropDown,
-}) {
+export default function Categories() {
+  const { Add, Edit, Delete, data } = useFunctionsContext();
+  const { catDropDown, cat } = useListContext();
   const categories = data[0];
-
-  const { Add, Edit, Delete } = useFunctionsContext();
 
   return categories.map((category, index) => (
     <React.Fragment key={category.id}>
@@ -83,14 +76,7 @@ export default function Categories({
             unmountOnExit
           >
             <Box sx={{ margin: 1 }}>
-              <Parents
-                data={data}
-                category={category}
-                par={par}
-                chi={chi}
-                parDropDown={parDropDown}
-                childDropDown={childDropDown}
-              />
+              <Parents category={category} />
             </Box>
           </Collapse>
         </TableCell>

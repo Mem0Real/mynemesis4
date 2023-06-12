@@ -20,18 +20,13 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useFunctionsContext } from "@/app/admin/page";
 import Items from "./Items";
+import { useListContext } from "../../ListTable";
 
-export default function Children({
-  data,
-  category,
-  parent,
-  chi,
-  childDropDown,
-}) {
+export default function Children({ category, parent }) {
+  const { Add, Edit, Delete, data } = useFunctionsContext();
   const children = data[2];
-  const items = data[3];
 
-  const { Add, Edit, Delete } = useFunctionsContext();
+  const { childDropDown, chi } = useListContext();
 
   return (
     <Table size="large" aria-label="children">
@@ -116,7 +111,6 @@ export default function Children({
                         }}
                       >
                         <Items
-                          data={data}
                           category={category}
                           parent={parent}
                           child={child}

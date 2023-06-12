@@ -11,10 +11,10 @@ import TableRow from "@mui/material/TableRow";
 import { DeleteForeverOutlined, EditOutlined } from "@mui/icons-material";
 import { useFunctionsContext } from "@/app/admin/page";
 
-export default function Items({ data, category, parent, child }) {
+export default function Items({ category, parent, child }) {
+  const { Add, Edit, Delete, data } = useFunctionsContext();
   const items = data[3];
 
-  const { Add, Edit, Delete } = useFunctionsContext();
   return (
     <>
       <Table size="medium" aria-label="items">

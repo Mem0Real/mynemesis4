@@ -20,18 +20,14 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useFunctionsContext } from "@/app/admin/page";
 import Children from "./Children";
+import { useListContext } from "../../ListTable";
 
-export default function Parents({
-  data,
-  category,
-  par,
-  chi,
-  parDropDown,
-  childDropDown,
-}) {
+export default function Parents({ category }) {
+  const { Add, Edit, Delete, data } = useFunctionsContext();
   const parents = data[1];
 
-  const { Add, Edit, Delete } = useFunctionsContext();
+  const { parDropDown, par } = useListContext();
+
   return (
     <Table size="medium" aria-label="parents">
       <TableHead>
@@ -110,13 +106,7 @@ export default function Parents({
                       unmountOnExit
                     >
                       <Box sx={{ margin: 1 }}>
-                        <Children
-                          data={data}
-                          category={category}
-                          parent={parent}
-                          chi={chi}
-                          childDropDown={childDropDown}
-                        />
+                        <Children category={category} parent={parent} />
                       </Box>
                     </Collapse>
                   </TableCell>

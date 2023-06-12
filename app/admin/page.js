@@ -16,13 +16,12 @@ const FunctionsContext = createContext({});
 function getAll() {
   const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
-  const { data, error, isLoading, mutate } = useSWR("/api/getAll", fetcher);
+  const { data, error, isLoading } = useSWR("/api/getAll", fetcher);
 
   return {
     data: data,
     isLoading: isLoading,
     isError: error,
-    mutate: mutate,
   };
 }
 
@@ -36,11 +35,7 @@ export default function AdminPage() {
 
   const router = useRouter();
 
-  // const fetcher = (url) => fetch(url).then((res) => res.json());
-
-  // const { data, error, isLoading, mutate } = useSWR("/api/getAll", fetcher);
-
-  const { data, isLoading, isError, mutate } = getAll();
+  const { data, isLoading, isError } = getAll();
 
   const Add = (entry, categoryId = null, parentId = null, childId = null) => {
     // Show Add Modal
@@ -131,13 +126,7 @@ export default function AdminPage() {
           </h1>
           {/* Table */}
           <div className="md:my-6 mb-6 md:pb-5 shadow-md shadow-black">
-            <ListTable
-              data={data}
-              add={Add}
-              edit={Edit}
-              delete={Delete}
-              mutate={mutate}
-            />
+            <ListTable />
 
             <div className="flex flex-col w-full justify-center items-center md:mt-3">
               <Button
@@ -156,9 +145,6 @@ export default function AdminPage() {
             closeAddModal={closeAddModal}
             addData={addData}
             setAddData={setAddData}
-            mutate={mutate}
-            data={data}
-            // mutateData={mutateData}
           />
 
           {/* Edit Modal */}
