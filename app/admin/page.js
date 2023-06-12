@@ -16,12 +16,13 @@ const FunctionsContext = createContext({});
 function getAll() {
   const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
-  const { data, error, isLoading } = useSWR("/api/getAll", fetcher);
+  const { data, error, isLoading, mutate } = useSWR("/api/getAll", fetcher);
 
   return {
     data: data,
     isLoading: isLoading,
     isError: error,
+    mutate: mutate,
   };
 }
 
@@ -35,7 +36,7 @@ export default function AdminPage() {
 
   const router = useRouter();
 
-  const { data, isLoading, isError } = getAll();
+  const { data, isLoading, isError, mutate } = getAll();
 
   const Add = (entry, categoryId = null, parentId = null, childId = null) => {
     // Show Add Modal
@@ -145,6 +146,7 @@ export default function AdminPage() {
             closeAddModal={closeAddModal}
             addData={addData}
             setAddData={setAddData}
+            mutate={mutate}
           />
 
           {/* Edit Modal */}
@@ -153,6 +155,7 @@ export default function AdminPage() {
             closeEditModal={closeEditModal}
             editData={editData}
             setEditData={setEditData}
+            mutate={mutate}
           />
 
           {/* Delete Alert */}
@@ -161,6 +164,7 @@ export default function AdminPage() {
             deleteData={deleteData}
             setDeleteData={setDeleteData}
             alertDialog={alertDialog}
+            mutate={mutate}
           />
         </div>
       </div>

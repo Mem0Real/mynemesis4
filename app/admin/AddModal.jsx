@@ -1,10 +1,11 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import Image from "next/image";
 import createCategory from "./components/createCategory";
 
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import { useFunctionsContext } from "./page";
 
 export default function AddModal({
   modal,
@@ -12,12 +13,13 @@ export default function AddModal({
   addData,
   setAddData,
   mutate,
-  data,
 }) {
   const [imageSrc, setImageSrc] = useState();
   const [uploadData, setUploadData] = useState();
 
   const imageRef = useRef();
+
+  const { data } = useFunctionsContext();
 
   const handleOnChange = (changeEvent) => {
     const reader = new FileReader();
