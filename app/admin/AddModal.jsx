@@ -2,7 +2,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import createCategory from "./components/createCategory";
-import { useSWRConfig } from "swr";
 
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -12,12 +11,12 @@ export default function AddModal({
   closeAddModal,
   addData,
   setAddData,
-  // mutateData,
+  mutate,
+  data,
 }) {
   const [imageSrc, setImageSrc] = useState();
   const [uploadData, setUploadData] = useState();
 
-  const { mutate } = useSWRConfig();
   const imageRef = useRef();
 
   const handleOnChange = (changeEvent) => {
@@ -47,13 +46,8 @@ export default function AddModal({
         method: "POST",
         body: formData,
       });
-      if (res.status === 200) {
-        await mutate("/api/getCat");
-      }
 
-      setImageSrc({});
-      setAddData({});
-      closeAddModal();
+      setTimeout(() => mutate([...data, addData]), 5000);
     } catch (error) {
       console.log(error);
     }

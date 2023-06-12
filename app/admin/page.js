@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, createContext, useContext } from "react";
+import { useRouter } from "next/navigation";
 import useSWR from "swr";
 
 import Button from "@mui/material/Button";
@@ -12,6 +13,19 @@ import LoadingIndicator from "../utils/LoadingIndicator";
 
 const FunctionsContext = createContext({});
 
+function getAll() {
+  const fetcher = (...args) => fetch(...args).then((res) => res.json());
+
+  const { data, error, isLoading, mutate } = useSWR("/api/getAll", fetcher);
+
+  return {
+    data: data,
+    isLoading: isLoading,
+    isError: error,
+    mutate: mutate,
+  };
+}
+
 export default function AdminPage() {
   const [alertDialog, setAlertDialog] = useState(false);
   const [addModal, setAddModal] = useState(false);
@@ -20,17 +34,13 @@ export default function AdminPage() {
   const [editModal, setEditModal] = useState(false);
   const [editData, setEditData] = useState({});
 
-  const fetcher = (url) => fetch(url).then((res) => res.json());
+  const router = useRouter();
 
-  const { data, error, isLoading } = useSWR("/api/getCat", fetcher, {
-    revalidateIfStale: true,
-  });
+  // const fetcher = (url) => fetch(url).then((res) => res.json());
 
-  async function mutateData() {
-    console.log("mutate called");
-    // mutate();
-    console.log(data);
-  }
+  // const { data, error, isLoading, mutate } = useSWR("/api/getAll", fetcher);
+
+  const { data, isLoading, isError, mutate } = getAll();
 
   const Add = (entry, categoryId = null, parentId = null, childId = null) => {
     // Show Add Modal
@@ -94,16 +104,19 @@ export default function AdminPage() {
   const closeEditModal = () => setEditModal(false);
   const handleCloseAlert = () => setAlertDialog(false);
 
-  if (isLoading)
+  if (isLoading) {
     return (
       <div className="flex flex-col justify-center items-center w-full min-h-screen">
         <LoadingIndicator />
       </div>
     );
+  }
 
-  if (error) {
+  if (isError) {
     throw new Error("Failed to load data");
   }
+
+  console.log(data);
 
   return (
     <FunctionsContext.Provider value={{ Add, Edit, Delete, data }}>
@@ -118,26 +131,22 @@ export default function AdminPage() {
           </h1>
           {/* Table */}
           <div className="md:my-6 mb-6 md:pb-5 shadow-md shadow-black">
-            {/* <ListTable data={data} add={Add} edit={Edit} delete={Delete} /> */}
-            {data &&
-              data.map((category) => (
-                <h1 key={category.id}>{category.name}</h1>
-              ))}
+            <ListTable
+              data={data}
+              add={Add}
+              edit={Edit}
+              delete={Delete}
+              mutate={mutate}
+            />
 
             <div className="flex flex-col w-full justify-center items-center md:mt-3">
-              <button
-                className="px-4 py-2 bg-green-500 rounded-md"
-                onClick={() => Add("categories")}
-              >
-                Add Category
-              </button>
-              {/* <Button
+              <Button
                 variant="contained"
                 color="success"
                 onClick={() => Add("categories")}
               >
                 Add Category
-              </Button> */}
+              </Button>
             </div>
           </div>
 
@@ -147,6 +156,8 @@ export default function AdminPage() {
             closeAddModal={closeAddModal}
             addData={addData}
             setAddData={setAddData}
+            mutate={mutate}
+            data={data}
             // mutateData={mutateData}
           />
 
