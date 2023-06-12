@@ -36,6 +36,7 @@ export async function POST(request, response) {
 
   let category = { name: undefined, val: undefined };
 
+  console.log(entry, id, name, description);
   //   Write to databse
   const writeToDb = async (dir) => {
     formData.set("image", dir);
@@ -57,7 +58,10 @@ export async function POST(request, response) {
 
     const exist = await checkExistence(id);
 
-    if (exist) {
+    if (!exist)
+      return new NextResponse("Could not find item.", { status: 500 });
+
+    try {
       const res = await prisma[entry].update({
         where: { id: id },
         data: {
@@ -71,8 +75,12 @@ export async function POST(request, response) {
           image: image,
         },
       });
-      return NextResponse.json({ message: `${name} updated successfully` });
-    } else return NextResponse.json({ message: `"${name}" Already Exists.` });
+      return new NextResponse("Updated Successfully", { status: 201 });
+    } catch (error) {
+      return new NextResponse("Error Updating Item. Please try again later.", {
+        status: 500,
+      });
+    }
 
     // return NextResponse.json(res);
   };
@@ -124,9 +132,7 @@ export async function POST(request, response) {
       )}-${uniqueSuffix}.${mime.getExtension(file.type)}`;
       await writeFile(`${uploadDir}/${filename}`, buffer);
       let imageUrl = `${relativeUploadDir}/${filename}`;
-      let dbStat = writeToDb(imageUrl);
-      return dbStat;
-      // return NextResponse.json({ imgUrl: `${relativeUploadDir}/${filename}` });
+      // writeToDb(imageUrl);
     } catch (e) {
       console.error("Error while trying to upload a file\n", e);
       return NextResponse.json(

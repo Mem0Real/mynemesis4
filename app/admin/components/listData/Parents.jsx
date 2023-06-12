@@ -66,30 +66,26 @@ export default function Parents({ category }) {
                   </TableCell>
                   <TableCell>{parent.description}</TableCell>
                   <TableCell align="center">
-                    {(par.id !== parent.id || !par.open) && (
-                      <div className="flex justify-evenly items-center">
-                        <button
-                          className="text-green-500"
-                          onClick={() =>
-                            Add("children", category.id, parent.id)
-                          }
-                        >
-                          <AddOutlined />
-                        </button>
-                        <button
-                          onClick={() => Edit("parents", parent)}
-                          className="text-blue-500"
-                        >
-                          <EditOutlined />
-                        </button>
-                        <button
-                          onClick={() => Delete("parents", null, parent)}
-                          className="text-red-500"
-                        >
-                          <DeleteForeverOutlined />
-                        </button>
-                      </div>
-                    )}
+                    <div className="flex justify-evenly items-center">
+                      <button
+                        className="text-green-500"
+                        onClick={() => Add("children", category.id, parent.id)}
+                      >
+                        <AddOutlined />
+                      </button>
+                      <button
+                        onClick={() => Edit("parents", parent)}
+                        className="text-blue-500"
+                      >
+                        <EditOutlined />
+                      </button>
+                      <button
+                        onClick={() => Delete("parents", null, parent)}
+                        className="text-red-500"
+                      >
+                        <DeleteForeverOutlined />
+                      </button>
+                    </div>
                   </TableCell>
                 </TableRow>
                 <TableRow>

@@ -66,30 +66,28 @@ export default function Children({ category, parent }) {
                   </TableCell>
                   <TableCell>{child.description}</TableCell>
                   <TableCell align="center">
-                    {(chi.id !== child.id || !chi.open) && (
-                      <div className="flex justify-evenly items-center">
-                        <button
-                          className="text-green-500"
-                          onClick={() =>
-                            Add("items", category.id, parent.id, child.id)
-                          }
-                        >
-                          <AddOutlined />
-                        </button>
-                        <button
-                          onClick={() => Edit(category.id, parent.id, child.id)}
-                          className="text-blue-500"
-                        >
-                          <EditOutlined />
-                        </button>
-                        <button
-                          onClick={() => Delete("children", null, null, child)}
-                          className="text-red-500"
-                        >
-                          <DeleteForeverOutlined />
-                        </button>
-                      </div>
-                    )}
+                    <div className="flex justify-evenly items-center">
+                      <button
+                        className="text-green-500"
+                        onClick={() =>
+                          Add("items", category.id, parent.id, child.id)
+                        }
+                      >
+                        <AddOutlined />
+                      </button>
+                      <button
+                        onClick={() => Edit(category.id, parent.id, child.id)}
+                        className="text-blue-500"
+                      >
+                        <EditOutlined />
+                      </button>
+                      <button
+                        onClick={() => Delete("children", null, null, child)}
+                        className="text-red-500"
+                      >
+                        <DeleteForeverOutlined />
+                      </button>
+                    </div>
                   </TableCell>
                 </TableRow>
                 <TableRow>

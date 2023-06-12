@@ -11,6 +11,7 @@ export default function AlertDialog({
   handleCloseAlert,
   deleteData,
   setDeleteData,
+  mutate,
 }) {
   let dd = { entry: null, id: null, name: null };
   if (deleteData.entry === "items") {
@@ -32,8 +33,13 @@ export default function AlertDialog({
   }
 
   const handleDelete = async (deleteData) => {
-    handleCloseAlert();
-    deleteCategory(deleteData);
+    try {
+      await deleteCategory(deleteData);
+      setTimeout(() => mutate(), 2000);
+      handleCloseAlert();
+    } catch (err) {
+      console.log(err);
+    }
   };
   return (
     <div>
@@ -51,9 +57,9 @@ export default function AlertDialog({
         </DialogTitle>
         <DialogContent className="bg-neutral-900">
           <DialogContentText id="alert-dialog-description">
-            <p className=" text-neutral-200">
+            <span className=" text-neutral-200">
               If you proceed, it will be removed from the database permanently!
-            </p>
+            </span>
           </DialogContentText>
         </DialogContent>
         <DialogActions className="bg-neutral-900">

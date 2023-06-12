@@ -1,11 +1,12 @@
 "use client";
 import React, { useState, useRef } from "react";
 import Image from "next/image";
-import createCategory from "./components/createCategory";
+
+import { useFunctionsContext } from "./page";
+import formatData from "../utils/formatData";
 
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { useFunctionsContext } from "./page";
 
 export default function AddModal({
   modal,
@@ -42,7 +43,7 @@ export default function AddModal({
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const formData = createCategory(addData);
+    const formData = formatData(addData);
     try {
       const res = await fetch("/api/createCategory", {
         method: "POST",
@@ -100,9 +101,13 @@ export default function AddModal({
             </button>
             <div className="px-2 md:px-11 pb-12 lg:py-6">
               <h3 className="mb-4 py-4 text-xl text-center font-medium text-gray-900 dark:text-white">
-                <p className="mt-5">
-                  Create New Category {title && inside + <u> title </u>}
-                </p>
+                {title ? (
+                  <p className="mt-5">
+                    Create New Category inside <u> {title} </u>
+                  </p>
+                ) : (
+                  <p className="mt-5">Create New Category</p>
+                )}
               </h3>
               <form
                 encType="multipart/form-data"
@@ -126,7 +131,7 @@ export default function AddModal({
                     htmlFor="name"
                     className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                   >
-                    <span className="text-red-500 md:-ml-4 md:mr-2">*</span>{" "}
+                    <span className="text-red-500 md:-ml-4 md:mr-2">*</span>
                     Name
                   </label>
                 </div>
@@ -147,7 +152,7 @@ export default function AddModal({
                     ShortName
                   </label>
                 </div>
-                {addData.children && (
+                {addData.entry === "items" && (
                   <>
                     {/* Brand */}
                     <div className="relative z-0 w-2/3 mb-6 group">

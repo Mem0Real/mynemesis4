@@ -1,28 +1,29 @@
 "use client";
+
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import editCategory from "./components/editCategory";
+// import editCategory from "./components/editCategory";
+import formatData from "../utils/formatData";
+import { useFunctionsContext } from "./page";
 
 export default function EditModal({
   modal,
   closeEditModal,
   editData,
   setEditData,
+  mutate,
 }) {
-  const [data, setData] = useState({});
-  const [status, setStatus] = useState({});
+  // const [data, setData] = useState({});
+  // const [status, setStatus] = useState({});
   const [imageSrc, setImageSrc] = useState();
   const [uploadData, setUploadData] = useState();
 
-  useEffect(() => {
-    setData(editData);
-    setImageSrc(editData.image);
-  }, [editData]);
-
   const imageRef = useRef();
+
+  const { data } = useFunctionsContext();
 
   const handleOnChange = (changeEvent) => {
     const reader = new FileReader();
@@ -33,27 +34,40 @@ export default function EditModal({
     };
 
     reader.readAsDataURL(changeEvent.target.files[0]);
-    setData({ ...data, image: changeEvent.target.files[0] });
+    setEditData({ ...editData, image: changeEvent.target.files[0] });
   };
 
   const handleChange = (e) => {
     const fieldName = e.target.name;
     const fieldValue = e.target.value;
 
-    setData({ ...data, [fieldName]: fieldValue });
+    setEditData({ ...editData, [fieldName]: fieldValue });
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    editCategory(data)
-      .then((res) => setStatus(res))
-      .then(setData({}))
-      .then(setImageSrc())
-      .then(setEditData({}));
-    console.log(status);
+    const formData = formatData(editData);
+    try {
+      const res = await fetch("/api/edit", {
+        method: "POST",
+        body: formData,
+        //   headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      });
+
+      setTimeout(() => mutate(), 5000);
+    } catch (error) {
+      console.log(error);
+    }
+
+    // editCategory(editData)
+    //   .then(setTimeout(() => mutate([...editData, editData]), 2000))
+    //   .then((res) => setStatus(res))
+    //   .then(setEditData({}))
+    //   .then(setImageSrc())
+    //   .then(setEditData({}));
   };
 
-  let title = data.id;
+  let title = editData.id;
   if (title) title = title[0].toUpperCase() + title.slice(1);
 
   return (
@@ -106,7 +120,7 @@ export default function EditModal({
                     id="name"
                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                     placeholder=" "
-                    value={data.name}
+                    value={editData.name || ""}
                     onChange={handleChange}
                     required
                   />
@@ -119,7 +133,7 @@ export default function EditModal({
                     Name
                   </label>
                 </div>
-                {data.entry === "items" && (
+                {editData.entry === "items" && (
                   <>
                     {/* Brand */}
                     <div className="relative z-0 w-2/3 mb-6 group">
@@ -129,7 +143,7 @@ export default function EditModal({
                         type="text"
                         className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" "
-                        value={data.brand}
+                        value={editData.brand || ""}
                         onChange={handleChange}
                       />
                       <label
@@ -148,7 +162,7 @@ export default function EditModal({
                         type="text"
                         className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" "
-                        value={data.model}
+                        value={editData.model || ""}
                         onChange={handleChange}
                       />
                       <label
@@ -167,7 +181,7 @@ export default function EditModal({
                         type="number"
                         className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" "
-                        value={data.quantity}
+                        value={editData.quantity || ""}
                         onChange={handleChange}
                       />
                       <label
@@ -186,7 +200,7 @@ export default function EditModal({
                         type="number"
                         className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" "
-                        value={data.price}
+                        value={editData.price || ""}
                         onChange={handleChange}
                       />
                       <label
@@ -207,7 +221,7 @@ export default function EditModal({
                     type="text"
                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                     placeholder=" "
-                    value={data.description}
+                    value={editData.description || ""}
                     onChange={handleChange}
                   />
                   <label

@@ -44,28 +44,26 @@ export default function Categories() {
         <TableCell>{category.description}</TableCell>
         {/* Buttons */}
         <TableCell align="center" colSpan={5}>
-          {(cat.id !== category.id || !cat.open) && (
-            <div className="flex justify-evenly items-center">
-              <button
-                onClick={() => Add("parents", category.id)}
-                className="text-green-500"
-              >
-                <AddOutlined />
-              </button>
-              <button
-                onClick={() => Edit("categories", category)}
-                className="text-blue-500"
-              >
-                <EditOutlined />
-              </button>
-              <button
-                onClick={() => Delete("categories", category)}
-                className="text-red-500"
-              >
-                <DeleteForeverOutlined />
-              </button>
-            </div>
-          )}
+          <div className="flex justify-evenly items-center">
+            <button
+              onClick={() => Add("parents", category.id)}
+              className="text-green-500"
+            >
+              <AddOutlined />
+            </button>
+            <button
+              onClick={() => Edit("categories", category)}
+              className="text-blue-500"
+            >
+              <EditOutlined />
+            </button>
+            <button
+              onClick={() => Delete("categories", category)}
+              className="text-red-500"
+            >
+              <DeleteForeverOutlined />
+            </button>
+          </div>
         </TableCell>
       </TableRow>
       <TableRow>
