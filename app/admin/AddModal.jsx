@@ -47,7 +47,7 @@ export default function AddModal({
         body: formData,
       });
 
-      setTimeout(() => mutate([...data, addData]), 5000);
+      setTimeout(() => mutate([...data, addData]), 1000);
     } catch (error) {
       console.log(error);
     }
