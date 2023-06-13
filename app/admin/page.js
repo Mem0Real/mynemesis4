@@ -117,8 +117,6 @@ export default function AdminPage() {
     throw new Error("Failed to load data");
   }
 
-  console.log(data);
-
   return (
     <FunctionsContext.Provider value={{ Add, Edit, Delete, data, url }}>
       <div className="flex flex-col w-full justify-center items-center bg-neutral-100 text-neutral-900 md:mt-6">

@@ -36,7 +36,6 @@ export async function POST(request, response) {
 
   let category = { name: undefined, val: undefined };
 
-  console.log(entry, id, name, description);
   //   Write to databse
   const writeToDb = async (dir) => {
     formData.set("image", dir);
