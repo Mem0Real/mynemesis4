@@ -23,7 +23,7 @@ export default function EditModal({
 
   const imageRef = useRef();
 
-  const { data } = useFunctionsContext();
+  const { data, url } = useFunctionsContext();
 
   const handleOnChange = (changeEvent) => {
     const reader = new FileReader();
@@ -48,12 +48,16 @@ export default function EditModal({
     event.preventDefault();
     const formData = formatData(editData);
     try {
-      const res = await fetch("/api/edit", {
+      const res = await fetch(`${url}/api/edit`, {
         method: "POST",
         body: formData,
       });
 
       setTimeout(() => mutate(), 5000);
+
+      closeEditModal();
+      setEditData({});
+      setImageSrc({});
     } catch (error) {
       console.log(error);
     }

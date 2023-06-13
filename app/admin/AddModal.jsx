@@ -20,7 +20,7 @@ export default function AddModal({
 
   const imageRef = useRef();
 
-  const { data } = useFunctionsContext();
+  const { data, url } = useFunctionsContext();
 
   const handleOnChange = (changeEvent) => {
     const reader = new FileReader();
@@ -45,12 +45,15 @@ export default function AddModal({
     event.preventDefault();
     const formData = formatData(addData);
     try {
-      const res = await fetch("/api/createCategory", {
+      const res = await fetch(`${url}/api/createCategory`, {
         method: "POST",
         body: formData,
       });
 
       setTimeout(() => mutate([...data, addData]), 5000);
+      closeAddModal();
+      setAddData({});
+      setImageSrc({});
     } catch (error) {
       console.log(error);
     }
