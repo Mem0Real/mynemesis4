@@ -35,7 +35,7 @@ export default function AlertDialog({
   const handleDelete = async (deleteData) => {
     try {
       await deleteCategory(deleteData);
-      setTimeout(() => mutate(), 2000);
+      setTimeout(() => mutate(), 5000);
       handleCloseAlert();
     } catch (err) {
       console.log(err);

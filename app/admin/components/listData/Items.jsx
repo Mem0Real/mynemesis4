@@ -57,9 +57,7 @@ export default function Items({ category, parent, child }) {
                   <TableCell align="center">
                     <div className="flex justify-evenly items-center">
                       <button
-                        onClick={() =>
-                          Edit(category.id, parent.id, child.id, item.id)
-                        }
+                        onClick={() => Edit("items", item)}
                         className="text-blue-500"
                       >
                         <EditOutlined />

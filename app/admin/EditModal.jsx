@@ -51,7 +51,6 @@ export default function EditModal({
       const res = await fetch("/api/edit", {
         method: "POST",
         body: formData,
-        //   headers: { "Content-Type": "application/x-www-form-urlencoded" },
       });
 
       setTimeout(() => mutate(), 5000);

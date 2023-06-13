@@ -50,7 +50,7 @@ export default function AddModal({
         body: formData,
       });
 
-      setTimeout(() => mutate([...data, addData]), 1000);
+      setTimeout(() => mutate([...data, addData]), 5000);
     } catch (error) {
       console.log(error);
     }
@@ -102,13 +102,9 @@ export default function AddModal({
             <div className="px-2 md:px-11 pb-12 lg:py-6">
               <h3 className="mb-4 py-4 text-xl text-center font-medium text-gray-900 dark:text-white">
                 {title ? (
-<<<<<<< HEAD:app/admin/components/AddModal.jsx
-                  <p className="mt-5">Create New Category inside {title}</p>
-=======
                   <p className="mt-5">
                     Create New Category inside <u> {title} </u>
                   </p>
->>>>>>> features-swr-data-fetching:app/admin/AddModal.jsx
                 ) : (
                   <p className="mt-5">Create New Category</p>
                 )}

@@ -76,7 +76,7 @@ export default function Children({ category, parent }) {
                         <AddOutlined />
                       </button>
                       <button
-                        onClick={() => Edit(category.id, parent.id, child.id)}
+                        onClick={() => Edit("children", child)}
                         className="text-blue-500"
                       >
                         <EditOutlined />
