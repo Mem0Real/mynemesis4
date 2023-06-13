@@ -15,21 +15,14 @@ import {
 
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { useFunctionsContext } from "../List";
+import { useFunctionsContext } from "@/app/admin/page";
 import Parents from "./Parents";
+import { useListContext } from "../../ListTable";
 
-export default function Categories({
-  data,
-  cat,
-  par,
-  chi,
-  catDropDown,
-  parDropDown,
-  childDropDown,
-}) {
+export default function Categories() {
+  const { Add, Edit, Delete, data } = useFunctionsContext();
+  const { catDropDown, cat } = useListContext();
   const categories = data[0];
-
-  const { Add, Edit, Delete } = useFunctionsContext();
 
   return categories.map((category, index) => (
     <React.Fragment key={category.id}>
@@ -51,28 +44,26 @@ export default function Categories({
         <TableCell>{category.description}</TableCell>
         {/* Buttons */}
         <TableCell align="center" colSpan={5}>
-          {(cat.id !== category.id || !cat.open) && (
-            <div className="flex justify-evenly items-center">
-              <button
-                onClick={() => Add("parents", category.id)}
-                className="text-green-500"
-              >
-                <AddOutlined />
-              </button>
-              <button
-                onClick={() => Edit("categories", category)}
-                className="text-blue-500"
-              >
-                <EditOutlined />
-              </button>
-              <button
-                onClick={() => Delete("categories", category)}
-                className="text-red-500"
-              >
-                <DeleteForeverOutlined />
-              </button>
-            </div>
-          )}
+          <div className="flex justify-evenly items-center">
+            <button
+              onClick={() => Add("parents", category.id)}
+              className="text-green-500"
+            >
+              <AddOutlined />
+            </button>
+            <button
+              onClick={() => Edit("categories", category)}
+              className="text-blue-500"
+            >
+              <EditOutlined />
+            </button>
+            <button
+              onClick={() => Delete("categories", category)}
+              className="text-red-500"
+            >
+              <DeleteForeverOutlined />
+            </button>
+          </div>
         </TableCell>
       </TableRow>
       <TableRow>
@@ -83,14 +74,7 @@ export default function Categories({
             unmountOnExit
           >
             <Box sx={{ margin: 1 }}>
-              <Parents
-                data={data}
-                category={category}
-                par={par}
-                chi={chi}
-                parDropDown={parDropDown}
-                childDropDown={childDropDown}
-              />
+              <Parents category={category} />
             </Box>
           </Collapse>
         </TableCell>

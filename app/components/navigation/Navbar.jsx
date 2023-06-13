@@ -31,14 +31,16 @@ export const Navbar = () => {
         <div className="flex justify-between items-center w-full h-full px-8 py-2 text-md">
           <Link href="/">
             <div className="flex justify-evenly items-center">
-              <Image
-                src="/images/nemesisLogo.jpg"
-                alt="logo"
-                width="55"
-                height="55"
-                className="cursor-pointer rounded-full"
-                priority
-              />
+              <div className="relative h-12 w-12">
+                <Image
+                  src="/images/nemesisLogo.jpg"
+                  alt="logo"
+                  fill={true}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="cursor-pointer rounded-full object-cover"
+                  priority
+                />
+              </div>
               <h1 className="lg:px-12 sm:px-6 px-6 hidden sm:block text-xl uppercase font-medium">
                 Nemesis
               </h1>

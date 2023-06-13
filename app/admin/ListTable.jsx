@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, createContext, useContext } from "react";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -10,17 +10,14 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-import Categories from "../listData/Categories";
+import Categories from "@/app/admin/components/listData/Categories";
 
-export default function ListTable({ data, Add, Edit, Delete }) {
+const ListContext = createContext({});
+
+export default function ListTable() {
   const [cat, setCat] = useState({});
   const [par, setPar] = useState({});
   const [chi, setChi] = useState({});
-
-  const categories = data[0];
-  const parents = data[1];
-  const children = data[2];
-  const items = data[3];
 
   const catDropDown = (categoryId) => {
     if (!cat.id) {
@@ -77,36 +74,31 @@ export default function ListTable({ data, Add, Edit, Delete }) {
   };
 
   return (
-    <Paper sx={{ width: "100%", overflow: "hidden" }}>
-      <TableContainer component={Paper}>
-        <Table aria-label="table" stickyHeader size="large">
-          <TableHead>
-            <TableRow>
-              <TableCell></TableCell>
-              <TableCell>
-                <h1 className="text-md font-semibold">Name</h1>
-              </TableCell>
-              <TableCell>
-                <h1 className="text-md font-semibold">Description</h1>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            <Categories
-              data={data}
-              cat={cat}
-              par={par}
-              chi={chi}
-              catDropDown={catDropDown}
-              parDropDown={parDropDown}
-              childDropDown={childDropDown}
-              Add={Add}
-              Edit={Edit}
-              Delete={Delete}
-            />
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Paper>
+    <ListContext.Provider
+      value={{ catDropDown, parDropDown, childDropDown, cat, par, chi }}
+    >
+      <Paper sx={{ width: "100%", overflow: "hidden" }}>
+        <TableContainer component={Paper}>
+          <Table aria-label="table" stickyHeader size="large">
+            <TableHead>
+              <TableRow>
+                <TableCell></TableCell>
+                <TableCell>
+                  <h1 className="text-md font-semibold">Name</h1>
+                </TableCell>
+                <TableCell>
+                  <h1 className="text-md font-semibold">Description</h1>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <Categories />
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
+    </ListContext.Provider>
   );
 }
+
+export const useListContext = () => useContext(ListContext);

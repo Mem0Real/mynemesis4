@@ -18,20 +18,15 @@ import {
 
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { useFunctionsContext } from "../List";
+import { useFunctionsContext } from "@/app/admin/page";
 import Items from "./Items";
+import { useListContext } from "../../ListTable";
 
-export default function Children({
-  data,
-  category,
-  parent,
-  chi,
-  childDropDown,
-}) {
+export default function Children({ category, parent }) {
+  const { Add, Edit, Delete, data } = useFunctionsContext();
   const children = data[2];
-  const items = data[3];
 
-  const { Add, Edit, Delete } = useFunctionsContext();
+  const { childDropDown, chi } = useListContext();
 
   return (
     <Table size="large" aria-label="children">
@@ -71,30 +66,28 @@ export default function Children({
                   </TableCell>
                   <TableCell>{child.description}</TableCell>
                   <TableCell align="center">
-                    {(chi.id !== child.id || !chi.open) && (
-                      <div className="flex justify-evenly items-center">
-                        <button
-                          className="text-green-500"
-                          onClick={() =>
-                            Add("items", category.id, parent.id, child.id)
-                          }
-                        >
-                          <AddOutlined />
-                        </button>
-                        <button
-                          onClick={() => Edit(category.id, parent.id, child.id)}
-                          className="text-blue-500"
-                        >
-                          <EditOutlined />
-                        </button>
-                        <button
-                          onClick={() => Delete("children", null, null, child)}
-                          className="text-red-500"
-                        >
-                          <DeleteForeverOutlined />
-                        </button>
-                      </div>
-                    )}
+                    <div className="flex justify-evenly items-center">
+                      <button
+                        className="text-green-500"
+                        onClick={() =>
+                          Add("items", category.id, parent.id, child.id)
+                        }
+                      >
+                        <AddOutlined />
+                      </button>
+                      <button
+                        onClick={() => Edit(category.id, parent.id, child.id)}
+                        className="text-blue-500"
+                      >
+                        <EditOutlined />
+                      </button>
+                      <button
+                        onClick={() => Delete("children", null, null, child)}
+                        className="text-red-500"
+                      >
+                        <DeleteForeverOutlined />
+                      </button>
+                    </div>
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -116,7 +109,6 @@ export default function Children({
                         }}
                       >
                         <Items
-                          data={data}
                           category={category}
                           parent={parent}
                           child={child}

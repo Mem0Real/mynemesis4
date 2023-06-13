@@ -1,27 +1,29 @@
 "use client";
+
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
 import React, { useState, useRef, useEffect } from "react";
-
 import Image from "next/image";
-import createCategory from "./createCategory";
+// import editCategory from "./components/editCategory";
+import formatData from "../utils/formatData";
+import { useFunctionsContext } from "./page";
 
-export default function AddModal({
+export default function EditModal({
   modal,
-  closeAddModal,
-  addData,
-  setAddData,
+  closeEditModal,
+  editData,
+  setEditData,
+  mutate,
 }) {
-  const [data, setData] = useState({});
+  // const [data, setData] = useState({});
+  // const [status, setStatus] = useState({});
   const [imageSrc, setImageSrc] = useState();
   const [uploadData, setUploadData] = useState();
 
-  useEffect(() => {
-    setData(addData);
-  }, [addData]);
-
   const imageRef = useRef();
+
+  const { data } = useFunctionsContext();
 
   const handleOnChange = (changeEvent) => {
     const reader = new FileReader();
@@ -32,46 +34,49 @@ export default function AddModal({
     };
 
     reader.readAsDataURL(changeEvent.target.files[0]);
-    setData({ ...data, image: changeEvent.target.files[0] });
+    setEditData({ ...editData, image: changeEvent.target.files[0] });
   };
 
   const handleChange = (e) => {
     const fieldName = e.target.name;
     const fieldValue = e.target.value;
 
-    setData({ ...data, [fieldName]: fieldValue });
+    setEditData({ ...editData, [fieldName]: fieldValue });
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const addedData = data;
+    const formData = formatData(editData);
+    try {
+      const res = await fetch("/api/edit", {
+        method: "POST",
+        body: formData,
+        //   headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      });
 
-    createCategory(data)
-      .then(setData({}))
-      .then(setImageSrc())
-      .then(setAddData({}))
-      .then(() => closeAddModal())
-      .catch((e) => alert("Error creating category"));
+      setTimeout(() => mutate(), 5000);
+    } catch (error) {
+      console.log(error);
+    }
+
+    // editCategory(editData)
+    //   .then(setTimeout(() => mutate([...editData, editData]), 2000))
+    //   .then((res) => setStatus(res))
+    //   .then(setEditData({}))
+    //   .then(setImageSrc())
+    //   .then(setEditData({}));
   };
 
-  let title;
-  if (addData.categories) {
-    title = addData.categories;
-    title = title[0].toUpperCase() + title.slice(1);
-  } else if (addData.parents) {
-    title = addData.parents;
-    title = title[0].toUpperCase() + title.slice(1);
-  } else if (addData.children) {
-    title = addData.children;
-    title = title[0].toUpperCase() + title.slice(1);
-  }
+  let title = editData.id;
+  if (title) title = title[0].toUpperCase() + title.slice(1);
+
   return (
     <Modal
       open={modal}
-      onClose={closeAddModal}
-      aria-labelledby="Add Modal"
-      aria-describedby="Create a new category"
-      className="absolute w-3/5 py-6 mt-12 md:mt-0 md:w-1/2 md:py-3 mx-auto overflow-y-auto rounded-lg"
+      onClose={closeEditModal}
+      aria-labelledby="Edit Modal"
+      aria-describedby="Update category"
+      className="absolute w-3/4 py-6 mt-12 md:mt-0 md:w-1/2 md:py-3 mx-auto overflow-y-auto rounded-lg"
     >
       <Box className="">
         <div>
@@ -80,7 +85,7 @@ export default function AddModal({
               type="button"
               className="absolute top-6 right-2 md:top-5 md:right-5 text-black bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
               data-modal-hide="authentication-modal"
-              onClick={() => closeAddModal()}
+              onClick={() => closeEditModal()}
             >
               <svg
                 aria-hidden="true"
@@ -99,14 +104,11 @@ export default function AddModal({
             </button>
             <div className="px-2 md:px-11 pb-12 lg:py-6">
               <h3 className="mb-4 py-4 text-xl text-center font-medium text-gray-900 dark:text-white">
-                {title ? (
-                  <p className="mt-5">Create New Category inside {title}</p>
-                ) : (
-                  <p className="mt-5">Create New Category</p>
-                )}
+                <p className="mt-5">
+                  Update <u>{title}</u>
+                </p>
               </h3>
               <form
-                encType="multipart/form-data"
                 method="POST"
                 className="flex flex-col justify-center items-center my-4"
                 onSubmit={handleSubmit}
@@ -118,7 +120,7 @@ export default function AddModal({
                     id="name"
                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                     placeholder=" "
-                    value={data.name}
+                    value={editData.name || ""}
                     onChange={handleChange}
                     required
                   />
@@ -131,24 +133,7 @@ export default function AddModal({
                     Name
                   </label>
                 </div>
-                <div className="relative z-0 w-2/3 mb-6 group">
-                  <input
-                    id="id"
-                    name="id"
-                    type="text"
-                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                    placeholder=" "
-                    value={data.id}
-                    onChange={handleChange}
-                  />
-                  <label
-                    htmlFor="id"
-                    className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-                  >
-                    ShortName
-                  </label>
-                </div>
-                {addData.children && (
+                {editData.entry === "items" && (
                   <>
                     {/* Brand */}
                     <div className="relative z-0 w-2/3 mb-6 group">
@@ -158,7 +143,7 @@ export default function AddModal({
                         type="text"
                         className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" "
-                        value={data.brand}
+                        value={editData.brand || ""}
                         onChange={handleChange}
                       />
                       <label
@@ -177,7 +162,7 @@ export default function AddModal({
                         type="text"
                         className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" "
-                        value={data.model}
+                        value={editData.model || ""}
                         onChange={handleChange}
                       />
                       <label
@@ -196,7 +181,7 @@ export default function AddModal({
                         type="number"
                         className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" "
-                        value={data.quantity}
+                        value={editData.quantity || ""}
                         onChange={handleChange}
                       />
                       <label
@@ -215,7 +200,7 @@ export default function AddModal({
                         type="number"
                         className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" "
-                        value={data.price}
+                        value={editData.price || ""}
                         onChange={handleChange}
                       />
                       <label
@@ -236,7 +221,7 @@ export default function AddModal({
                     type="text"
                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                     placeholder=" "
-                    value={data.description}
+                    value={editData.description || ""}
                     onChange={handleChange}
                   />
                   <label

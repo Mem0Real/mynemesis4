@@ -12,5 +12,5 @@ export async function GET() {
 
   const data = await Promise.all([categories, parents, children, items]);
 
-  return NextResponse.json(data);
+  return new NextResponse(JSON.stringify(data), { status: 200 });
 }

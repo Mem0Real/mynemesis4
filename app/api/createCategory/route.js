@@ -89,7 +89,9 @@ export async function POST(request) {
 
     const exist = await checkExistence(id);
 
-    if (!exist) {
+    if (exist) return new NextResponse("Item Already Exists", { status: 500 });
+
+    try {
       const res = await prisma[entry].create({
         data: {
           id: id,
@@ -103,36 +105,11 @@ export async function POST(request) {
           [category.name]: category.val,
         },
       });
-
-      // if (entry !== "items") {
-      //   message = {
-      //     status: 200,
-      //     message: "Category Created Successfully!",
-      //   };
-      //   return NextResponse.json(res, message);
-      // } else {
-      //   message = {
-      //     status: 200,
-      //     message: "Item Created Successfully!",
-      //   };
-      //   return NextResponse.json(message);
-      // }
-      return res;
-    } else {
-      // if (entry !== "items") {
-      //   message = {
-      //     status: 200,
-      //     message: "Category Already Exists!",
-      //   };
-      //   return NextResponse.json(message);
-      // } else {
-      //   message = {
-      //     status: 200,
-      //     message: "Item Already Exists!",
-      //   };
-      //   return NextResponse.json(message);
-      // }
-      return (message = { msg: "Already Exists." });
+      return new NextResponse("Item Created Successfully", { status: 201 });
+    } catch (error) {
+      return new NextResponse("Error Creating Item. Please try again later.", {
+        status: 500,
+      });
     }
   };
 
@@ -190,6 +167,5 @@ export async function POST(request) {
     }
   }
 
-  console.log(dbStatus);
   return NextResponse.json({ status: dbStatus });
 }
