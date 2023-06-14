@@ -57,7 +57,7 @@ export default function EditModal({
 
       closeEditModal();
       setEditData({});
-      setImageSrc({});
+      // setImageSrc({});
     } catch (error) {
       console.log(error);
     }

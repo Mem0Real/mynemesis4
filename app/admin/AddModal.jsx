@@ -22,6 +22,12 @@ export default function AddModal({
 
   const { data, url } = useFunctionsContext();
 
+  let count;
+  if (addData.entry === "categories") count = data[0].length;
+  if (addData.entry === "parents") count = data[1].length;
+  if (addData.entry === "children") count = data[2].length;
+  if (addData.entry === "items") count = data[3].length;
+
   const handleOnChange = (changeEvent) => {
     const reader = new FileReader();
 
@@ -43,17 +49,35 @@ export default function AddModal({
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    // Set the name as id if it's empty
+    if (!addData.id) {
+      let idName = addData.name.toLowerCase();
+      let array = idName.split(/ and| &|, /);
+      idName = array[0];
+      idName = idName.replace(/\s/g, "-");
+      // setAddData({ ...addData, id: idName });
+      addData.id = idName;
+    }
+
     const formData = formatData(addData);
     try {
       const res = await fetch(`${url}/api/createCategory`, {
         method: "POST",
         body: formData,
       });
-
-      setTimeout(() => mutate([...data, addData]), 5000);
       closeAddModal();
-      setAddData({});
-      setImageSrc({});
+
+      // const check = await fetch(`${url}/api/check/${addData.id}`);
+
+      console.log(res.status);
+      if (res.status === 200) {
+        await mutate([...data, addData]);
+        setAddData({});
+      }
+
+      // setTimeout(() => mutate([...data, addData]), 5000);
+      // setImageSrc({});
     } catch (error) {
       console.log(error);
     }

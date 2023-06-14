@@ -91,6 +91,7 @@ export async function POST(request) {
 
     if (exist) return new NextResponse("Item Already Exists", { status: 500 });
 
+    console.log(entry, id, name, description);
     try {
       const res = await prisma[entry].create({
         data: {
