@@ -46,17 +46,13 @@ export async function POST(request) {
 
   let dbStatus, data, message;
 
-  function isObjEmpty(obj) {
-    return Object.keys(obj).length === 0;
-  }
+  // const checkExistence = async (id, name) => {
+  //   const result = await prisma[entry].findUnique({
+  //     where: { id: id },
+  //   });
 
-  const checkExistence = async (id, name) => {
-    const result = await prisma[entry].findUnique({
-      where: { id: id },
-    });
-
-    return result;
-  };
+  //   return result;
+  // };
 
   const writeToDb = async (dir) => {
     formData.set("image", dir);
@@ -87,11 +83,10 @@ export async function POST(request) {
       category.val = undefined;
     }
 
-    const exist = await checkExistence(id);
+    // const exist = await checkExistence(id);
 
-    if (exist) return new NextResponse("Item Already Exists", { status: 500 });
+    // if (exist) return new NextResponse("Item Already Exists", { status: 500 });
 
-    console.log(entry, id, name, description);
     try {
       const res = await prisma[entry].create({
         data: {

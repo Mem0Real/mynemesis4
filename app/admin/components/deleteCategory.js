@@ -17,7 +17,7 @@ export default async function deleteCategory(data) {
     path = `/api/delete/?catId=${data.categoryId}&entry=${data.entry}`;
   }
 
-  fetch(url + path, {
+  fetch(path, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",

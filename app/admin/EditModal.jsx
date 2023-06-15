@@ -6,7 +6,7 @@ import Modal from "@mui/material/Modal";
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 // import editCategory from "./components/editCategory";
-import formatData from "../utils/formatData";
+import formatData from "./components/formatData";
 import { useFunctionsContext } from "./page";
 
 export default function EditModal({
@@ -48,7 +48,7 @@ export default function EditModal({
     event.preventDefault();
     const formData = formatData(editData);
     try {
-      const res = await fetch(`${url}/api/edit`, {
+      const res = await fetch(`/api/edit`, {
         method: "POST",
         body: formData,
       });

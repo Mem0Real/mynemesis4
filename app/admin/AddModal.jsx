@@ -2,8 +2,8 @@
 import React, { useState, useRef } from "react";
 import Image from "next/image";
 
+import formatData from "./components/formatData";
 import { useFunctionsContext } from "./page";
-import formatData from "../utils/formatData";
 
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -62,19 +62,26 @@ export default function AddModal({
 
     const formData = formatData(addData);
     try {
-      const res = await fetch(`${url}/api/createCategory`, {
+      const res = await fetch(`/api/createCategory`, {
         method: "POST",
         body: formData,
       });
+      setTimeout(() => mutate([...data, addData]), 3000);
       closeAddModal();
+      // setAddData({});
 
-      // const check = await fetch(`${url}/api/check/${addData.id}`);
+      // if (res.status === 200) {
+      //   const check = await fetch(
+      //     `/api/check?entry=${addData.entry}&id=${addData.id}`
+      //   );
 
-      console.log(res.status);
-      if (res.status === 200) {
-        await mutate([...data, addData]);
-        setAddData({});
-      }
+      //   console.log(check.status);
+
+      //   if (check.status === 200) {
+      //     mutate([...data, addData]).then(setAddData({}));
+      //   }
+      // setAddData({});
+      // }
 
       // setTimeout(() => mutate([...data, addData]), 5000);
       // setImageSrc({});
