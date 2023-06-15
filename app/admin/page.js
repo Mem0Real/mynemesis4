@@ -14,7 +14,11 @@ import LoadingIndicator from "../utils/LoadingIndicator";
 const FunctionsContext = createContext({});
 
 function getAll() {
-  const fetcher = (...args) => fetch(...args).then((res) => res.json());
+  const fetcher = (...args) =>
+    fetch(...args, {
+      next: { revalidateTag: "getAll" },
+      cache: "no-store",
+    }).then((res) => res.json());
 
   const { data, error, isLoading, mutate } = useSWR("/api/getAll", fetcher);
 
